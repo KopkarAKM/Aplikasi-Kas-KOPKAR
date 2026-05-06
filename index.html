@@ -78,7 +78,6 @@
       const [transactions, setTransactions] = useState([]);
       const [opnames, setOpnames] = useState([]);
       const [printData, setPrintData] = useState(null);
-      const [loading, setLoading] = useState(false);
 
       useEffect(() => {
         fetch(SCRIPT_URL + '?action=readData')
@@ -359,7 +358,10 @@
         const [showForm, setShowForm] = useState(false);
         const [formData, setFormData] = useState({ date: new Date().toISOString().split('T')[0], type: 'keluar', amount: '', desc: '' });
 
-        const filtered = transactions.filter(t => t.desc.toLowerCase().includes(searchQuery.toLowerCase())).slice().reverse();
+        // Menggunakan (t.desc || '') agar terhindar dari error jika property desc bernilai undefined/null
+        const filtered = transactions.filter(t => 
+          (t.desc || t.description || '').toLowerCase().includes((searchQuery || '').toLowerCase())
+        ).slice().reverse();
 
         const handleAdd = (e) => {
           e.preventDefault();
