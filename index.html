@@ -81,40 +81,64 @@
         return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
     };
 
-    // Fungsi Normalisasi Data dari Google Sheet (Mengamankan perbedaan header kolom)
+    // Fungsi Pembaca Kolom Cerdas (Otomatis menyesuaikan dengan nama kolom apapun di Google Sheet)
     const normalizeTx = (t) => {
-      const typeRaw = String(t.type || t.Jenis || t.jenis || '').toLowerCase();
+      const keys = Object.keys(t);
+      const findKey = (words) => keys.find(k => words.some(w => k.toLowerCase().includes(w)));
+      
+      const typeKey = findKey(['jenis', 'type', 'kategori']);
+      const amountKey = findKey(['nominal', 'amount', 'jumlah', 'total']);
+      const descKey = findKey(['keterangan', 'desc', 'uraian', 'rincian']);
+      const dateKey = findKey(['tanggal', 'date', 'waktu']);
+      
+      const typeRaw = String(typeKey ? t[typeKey] : (t.type || '')).toLowerCase();
+      
       return {
         id: t.id || t.ID || Date.now() + Math.random(),
-        date: t.date || t.Tanggal || t.tanggal || '',
+        date: dateKey ? t[dateKey] : (t.date || ''),
         type: typeRaw.includes('masuk') ? 'masuk' : 'keluar',
-        amount: Number(t.amount || t.Nominal || t.nominal || 0),
-        desc: t.desc || t.Keterangan || t.keterangan || t.description || 'Tanpa Keterangan'
+        amount: Number(amountKey ? t[amountKey] : (t.amount || 0)),
+        desc: descKey ? t[descKey] : (t.desc || 'Tanpa Keterangan')
       };
     };
 
     const normalizeOp = (op) => {
+      const keys = Object.keys(op);
+      const findKey = (words) => keys.find(k => words.some(w => k.toLowerCase().includes(w)));
+      
+      const pecahanKey = findKey(['pecahan', 'detail']);
+      const dateKey = findKey(['tanggal', 'date']);
+      const saldoBukuKey = findKey(['buku']);
+      const saldoFisikKey = findKey(['fisik']);
+      const selisihKey = findKey(['selisih']);
+      const ketKey = findKey(['keterangan', 'ket']);
+      const statusKey = findKey(['status']);
+      const userKey = findKey(['buat', 'user', 'kasir']);
+      const periksaKey = findKey(['periksa']);
+      const tahuKey = findKey(['tahu', 'setuju']);
+
       let pecahanData = {};
       try {
-        pecahanData = typeof op.pecahan === 'string' ? JSON.parse(op.pecahan || '{}') : (op.pecahan || op['Detail Pecahan'] || op.Detail || {});
+        const rawPecahan = pecahanKey ? op[pecahanKey] : op.pecahan;
+        pecahanData = typeof rawPecahan === 'string' ? JSON.parse(rawPecahan || '{}') : (rawPecahan || {});
       } catch(e) {}
       
       return {
         id: op.id || op.ID || Date.now() + Math.random(),
-        date: op.date || op.Tanggal || op.tanggal || '',
-        saldoBuku: Number(op.saldoBuku || op['Saldo Buku'] || 0),
-        saldoFisik: Number(op.saldoFisik || op['Saldo Fisik'] || 0),
-        selisih: Number(op.selisih || op.Selisih || 0),
-        keterangan: op.keterangan || op['Keterangan Selisih'] || op.keteranganSelisih || '',
-        status: op.status || op.Status || 'Menunggu Diperiksa',
-        user: op.user || op.dibuatOleh || op['Dibuat Oleh'] || 'Kasir',
-        diperiksaOleh: op.diperiksaOleh || op['Diperiksa Oleh'] || '-',
-        diketahuiOleh: op.diketahuiOleh || op['Diketahui Oleh'] || '-',
+        date: dateKey ? op[dateKey] : (op.date || ''),
+        saldoBuku: Number(saldoBukuKey ? op[saldoBukuKey] : (op.saldoBuku || 0)),
+        saldoFisik: Number(saldoFisikKey ? op[saldoFisikKey] : (op.saldoFisik || 0)),
+        selisih: Number(selisihKey ? op[selisihKey] : (op.selisih || 0)),
+        keterangan: ketKey ? op[ketKey] : (op.keterangan || ''),
+        status: statusKey ? op[statusKey] : (op.status || 'Menunggu Diperiksa'),
+        user: userKey ? op[userKey] : (op.user || 'Kasir'),
+        diperiksaOleh: periksaKey ? op[periksaKey] : (op.diperiksaOleh || '-'),
+        diketahuiOleh: tahuKey ? op[tahuKey] : (op.diketahuiOleh || '-'),
         pecahan: pecahanData
       };
     };
 
-    // --- KOMPONEN TERPISAH (Agar tidak render ulang seluruh layar saat data tersinkron) ---
+    // --- KOMPONEN TERPISAH ---
 
     const Dashboard = ({ transactions, saldoBuku, totalPemasukan, totalPengeluaran, setActiveTab }) => {
       const recent = transactions.slice(0, 3);
@@ -205,7 +229,9 @@
       const [showForm, setShowForm] = useState(false);
       const [formData, setFormData] = useState({ date: new Date().toISOString().split('T')[0], type: 'keluar', amount: '', desc: '' });
 
-      const filtered = transactions.filter(t => t.desc.toLowerCase().includes(searchQuery.toLowerCase()));
+      const filtered = transactions.filter(t => 
+        (t.desc || '').toLowerCase().includes((searchQuery || '').toLowerCase())
+      );
 
       const handleAdd = (e) => {
         e.preventDefault();
@@ -599,13 +625,37 @@
       const [rawOpnames, setRawOpnames] = useState([]);
       const [printData, setPrintData] = useState(null);
 
-      // Sinkronisasi data aman (tanpa mengubah state jika gagal)
+      // Sinkronisasi data gabungan (Mencegah input hilang tertimpa sinkronisasi server)
       const fetchData = () => {
         fetch(SCRIPT_URL + '?action=readData')
           .then(res => res.json())
           .then(data => {
-            if(data.transactions) setRawTransactions(data.transactions);
-            if(data.opnames) setRawOpnames(data.opnames);
+            if(data.transactions) {
+              setRawTransactions(prev => {
+                const localOnly = prev.filter(localTx => {
+                  if (Date.now() - (localTx.id || 0) >= 60000) return false;
+                  const isAlreadyOnServer = data.transactions.some(serverTx => {
+                    const sTx = normalizeTx(serverTx);
+                    return sTx.desc === localTx.desc && Number(sTx.amount) === Number(localTx.amount);
+                  });
+                  return !isAlreadyOnServer;
+                });
+                return [...data.transactions, ...localOnly];
+              });
+            }
+            if(data.opnames) {
+              setRawOpnames(prev => {
+                const localOnly = prev.filter(localOp => {
+                  if (Date.now() - (localOp.id || 0) >= 60000) return false;
+                  const isAlreadyOnServer = data.opnames.some(serverOp => {
+                    const sOp = normalizeOp(serverOp);
+                    return Number(sOp.saldoFisik) === Number(localOp.saldoFisik) && Number(sOp.selisih) === Number(localOp.selisih);
+                  });
+                  return !isAlreadyOnServer;
+                });
+                return [...data.opnames, ...localOnly];
+              });
+            }
           })
           .catch(err => console.log('Sinkronisasi berjalan di latar...'));
       };
@@ -616,7 +666,6 @@
         return () => clearInterval(syncInterval);
       }, []);
 
-      // Normalisasi data secara aman (Handling "Invalid Date" & property kosong)
       const transactions = rawTransactions.filter(t => Object.keys(t).length > 0).map(normalizeTx).reverse();
       const opnames = rawOpnames.filter(o => Object.keys(o).length > 0).map(normalizeOp).reverse();
 
@@ -625,19 +674,19 @@
       const saldoBuku = totalPemasukan - totalPengeluaran;
 
       const submitTransaksi = (newTx) => {
-        setRawTransactions([...rawTransactions, newTx]);
+        setRawTransactions(prev => [...prev, newTx]);
         fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addTransaction', ...newTx }) });
       };
 
       const submitOpname = (dataOpname) => {
-        setRawOpnames([...rawOpnames, dataOpname]);
+        setRawOpnames(prev => [...prev, dataOpname]);
         setActiveTab('approval');
         fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'submitOpname', ...dataOpname }) });
       };
 
       const updateStatus = (id, actionRole) => {
         let approverName = role === 'bendahara' ? 'Bendahara' : 'Manager';
-        setRawOpnames(rawOpnames.map(op => {
+        setRawOpnames(prev => prev.map(op => {
           if (op.id === id || op.ID === id) {
             if (actionRole === 'periksa') return { ...op, status: 'Menunggu Disetujui', diperiksaOleh: approverName, 'Diperiksa Oleh': approverName };
             if (actionRole === 'setujui') return { ...op, status: 'Selesai', diketahuiOleh: approverName, 'Diketahui Oleh': approverName };
