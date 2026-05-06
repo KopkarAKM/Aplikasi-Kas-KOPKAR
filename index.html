@@ -17,13 +17,11 @@
     @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
     
     .animate-slide-up { animation: slideUp 0.3s ease-out forwards; }
     .animate-slide-down { animation: slideDown 0.3s ease-out forwards; }
     .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
     .animate-scale-in { animation: scaleIn 0.3s ease-out forwards; }
-    .animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
     
     .tab-active { @apply text-blue-400; }
     .tab-inactive { @apply text-slate-500 hover:text-slate-400; }
@@ -36,12 +34,10 @@
     .transaction-enter { animation: slideUp 0.4s ease-out forwards; opacity: 0; }
     .dot { @apply w-2 h-2 rounded-full; }
     
-    /* Custom Scrollbar for dark theme */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 
-    /* Print Styles */
     @media print {
       .no-print { display: none !important; }
       body, html { background: white !important; color: black !important; }
@@ -58,7 +54,7 @@
 
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfP26-S4E0R4IsvKhx4CfFcHBvNFevVsTR0pwbuoey2IluMStp97MioxFawwdzxJueNw/exec';
 
-    // Icons
+    // Ikons
     const IconHome = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>;
     const IconList = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>;
     const IconPlus = () => <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
@@ -74,17 +70,54 @@
     const IconPrint = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>;
     const IconBack = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>;
 
+    // Utility Format
     const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka || 0);
     const formatDate = (dateString) => {
+        if (!dateString) return '-';
         const date = new Date(dateString);
+        if (isNaN(date.getTime())) return String(dateString); // Jika gagal parse, kembalikan teks aslinya
         const today = new Date();
         if (date.toDateString() === today.toDateString()) return 'Hari ini';
         return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
     };
 
-    // Ekstrak Komponen Tampilan
+    // Fungsi Normalisasi Data dari Google Sheet (Mengamankan perbedaan header kolom)
+    const normalizeTx = (t) => {
+      const typeRaw = String(t.type || t.Jenis || t.jenis || '').toLowerCase();
+      return {
+        id: t.id || t.ID || Date.now() + Math.random(),
+        date: t.date || t.Tanggal || t.tanggal || '',
+        type: typeRaw.includes('masuk') ? 'masuk' : 'keluar',
+        amount: Number(t.amount || t.Nominal || t.nominal || 0),
+        desc: t.desc || t.Keterangan || t.keterangan || t.description || 'Tanpa Keterangan'
+      };
+    };
+
+    const normalizeOp = (op) => {
+      let pecahanData = {};
+      try {
+        pecahanData = typeof op.pecahan === 'string' ? JSON.parse(op.pecahan || '{}') : (op.pecahan || op['Detail Pecahan'] || op.Detail || {});
+      } catch(e) {}
+      
+      return {
+        id: op.id || op.ID || Date.now() + Math.random(),
+        date: op.date || op.Tanggal || op.tanggal || '',
+        saldoBuku: Number(op.saldoBuku || op['Saldo Buku'] || 0),
+        saldoFisik: Number(op.saldoFisik || op['Saldo Fisik'] || 0),
+        selisih: Number(op.selisih || op.Selisih || 0),
+        keterangan: op.keterangan || op['Keterangan Selisih'] || op.keteranganSelisih || '',
+        status: op.status || op.Status || 'Menunggu Diperiksa',
+        user: op.user || op.dibuatOleh || op['Dibuat Oleh'] || 'Kasir',
+        diperiksaOleh: op.diperiksaOleh || op['Diperiksa Oleh'] || '-',
+        diketahuiOleh: op.diketahuiOleh || op['Diketahui Oleh'] || '-',
+        pecahan: pecahanData
+      };
+    };
+
+    // --- KOMPONEN TERPISAH (Agar tidak render ulang seluruh layar saat data tersinkron) ---
+
     const Dashboard = ({ transactions, saldoBuku, totalPemasukan, totalPengeluaran, setActiveTab }) => {
-      const recent = transactions.slice().reverse().slice(0, 3);
+      const recent = transactions.slice(0, 3);
       const statusColor = saldoBuku >= 0 ? 'from-emerald-500 to-teal-600' : 'from-red-500 to-orange-600';
 
       return (
@@ -126,7 +159,7 @@
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
                 <span className="dot bg-blue-400"></span> Transaksi Terbaru
               </h3>
-              <button onClick={() => setActiveTab('transaksi')} className="text-xs text-blue-400 hover:text-blue-300 font-semibold cursor-pointer">Lihat Semua →</button>
+              <button onClick={() => setActiveTab('transaksi')} className="text-xs text-blue-400 hover:text-blue-300 font-semibold cursor-pointer btn-press">Lihat Semua →</button>
             </div>
             
             {recent.length === 0 ? (
@@ -146,14 +179,14 @@
                             {isIn ? <IconArrowDownLeft /> : <IconArrowUpRight />}
                           </div>
                           <div>
-                            <p className="text-sm font-semibold text-white">{t.desc || '-'}</p>
+                            <p className="text-sm font-semibold text-white truncate max-w-[150px]">{t.desc}</p>
                             <div className="flex items-center gap-2 mt-1">
                               <span className={`dot ${isIn ? 'bg-emerald-400/50' : 'bg-red-400/50'}`}></span>
                               <span className="text-xs text-slate-400">{formatDate(t.date)}</span>
                             </div>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right whitespace-nowrap">
                           <p className={`text-sm font-bold ${isIn ? 'text-emerald-400' : 'text-red-400'}`}>{isIn ? '+' : '-'}{formatRp(t.amount)}</p>
                         </div>
                       </div>
@@ -172,9 +205,7 @@
       const [showForm, setShowForm] = useState(false);
       const [formData, setFormData] = useState({ date: new Date().toISOString().split('T')[0], type: 'keluar', amount: '', desc: '' });
 
-      const filtered = transactions.filter(t => 
-        (t.desc || t.description || '').toLowerCase().includes((searchQuery || '').toLowerCase())
-      ).slice().reverse();
+      const filtered = transactions.filter(t => t.desc.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const handleAdd = (e) => {
         e.preventDefault();
@@ -207,7 +238,7 @@
                           {isIn ? <IconArrowDownLeft /> : <IconArrowUpRight />}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-white">{t.desc || '-'}</p>
+                          <p className="text-sm font-semibold text-white">{t.desc}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <span className={`dot ${isIn ? 'bg-emerald-400/50' : 'bg-red-400/50'}`}></span>
                             <span className="text-xs text-slate-400">{formatDate(t.date)}</span>
@@ -233,7 +264,7 @@
               <div className="bg-gradient-to-b from-slate-800 to-slate-900 w-full rounded-t-3xl p-6 animate-slide-up border-t border-slate-700/50 shadow-2xl">
                 <div className="flex items-center justify-between mb-5">
                   <h2 className="font-bold text-xl text-white">Tambah Transaksi</h2>
-                  <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-white transition"><IconX /></button>
+                  <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-white transition btn-press"><IconX /></button>
                 </div>
                 <form onSubmit={handleAdd} className="space-y-3">
                   <div>
@@ -243,8 +274,8 @@
                   <div>
                     <label className="text-sm font-semibold text-slate-300 mb-2 block">Jenis Transaksi</label>
                     <div className="flex gap-2">
-                      <button type="button" className={`flex-1 py-3 rounded-xl border font-semibold text-sm transition-all ${formData.type === 'keluar' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600'}`} onClick={() => setFormData({...formData, type: 'keluar'})}>💸 Keluar</button>
-                      <button type="button" className={`flex-1 py-3 rounded-xl border font-semibold text-sm transition-all ${formData.type === 'masuk' ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600'}`} onClick={() => setFormData({...formData, type: 'masuk'})}>💰 Masuk</button>
+                      <button type="button" className={`flex-1 py-3 rounded-xl border font-semibold text-sm transition-all btn-press ${formData.type === 'keluar' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600'}`} onClick={() => setFormData({...formData, type: 'keluar'})}>💸 Keluar</button>
+                      <button type="button" className={`flex-1 py-3 rounded-xl border font-semibold text-sm transition-all btn-press ${formData.type === 'masuk' ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600'}`} onClick={() => setFormData({...formData, type: 'masuk'})}>💰 Masuk</button>
                     </div>
                   </div>
                   <div>
@@ -387,13 +418,13 @@
 
                 <div className="bg-slate-900/50 p-3 rounded-lg text-xs space-y-2 mt-3 border border-slate-700/50">
                   <div className="flex justify-between items-center text-slate-300">
-                    <span>Dibuat Oleh:</span><span className="font-bold text-white">{op.user || 'Kasir'}</span>
+                    <span>Dibuat Oleh:</span><span className="font-bold text-white">{op.user}</span>
                   </div>
                   <div className="flex justify-between items-center text-slate-300">
-                    <span>Diperiksa Oleh:</span><span className="font-bold text-white">{op.diperiksaOleh || '-'}</span>
+                    <span>Diperiksa Oleh:</span><span className="font-bold text-white">{op.diperiksaOleh}</span>
                   </div>
                   <div className="flex justify-between items-center text-slate-300">
-                    <span>Diketahui Oleh:</span><span className="font-bold text-white">{op.diketahuiOleh || '-'}</span>
+                    <span>Diketahui Oleh:</span><span className="font-bold text-white">{op.diketahuiOleh}</span>
                   </div>
                 </div>
 
@@ -452,7 +483,7 @@
             <table className="w-full mb-6">
               <tbody>
                 <tr><td className="w-48 pb-1">Tanggal Cash Opname</td><td className="w-4">:</td><td>{formatDate(op.date)}</td></tr>
-                <tr><td className="pb-1">Jam Pemeriksaan</td><td>:</td><td>{new Date(op.date).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}</td></tr>
+                <tr><td className="pb-1">Jam Pemeriksaan</td><td>:</td><td>{op.date ? new Date(op.date).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}) : '-'}</td></tr>
               </tbody>
             </table>
 
@@ -564,49 +595,52 @@
     function App() {
       const [activeTab, setActiveTab] = useState('dashboard');
       const [role, setRole] = useState('kasir');
-      const [transactions, setTransactions] = useState([]);
-      const [opnames, setOpnames] = useState([]);
+      const [rawTransactions, setRawTransactions] = useState([]);
+      const [rawOpnames, setRawOpnames] = useState([]);
       const [printData, setPrintData] = useState(null);
 
+      // Sinkronisasi data aman (tanpa mengubah state jika gagal)
       const fetchData = () => {
         fetch(SCRIPT_URL + '?action=readData')
           .then(res => res.json())
           .then(data => {
-            if(data.transactions) setTransactions(data.transactions);
-            if(data.opnames) setOpnames(data.opnames);
+            if(data.transactions) setRawTransactions(data.transactions);
+            if(data.opnames) setRawOpnames(data.opnames);
           })
-          .catch(err => console.log('Proses sinkronisasi data tertunda.'));
+          .catch(err => console.log('Sinkronisasi berjalan di latar...'));
       };
 
       useEffect(() => {
         fetchData();
-        const syncInterval = setInterval(() => {
-          fetchData();
-        }, 10000);
+        const syncInterval = setInterval(fetchData, 10000);
         return () => clearInterval(syncInterval);
       }, []);
 
-      const totalPemasukan = transactions.filter(t => t.type === 'masuk').reduce((sum, t) => sum + Number(t.amount), 0);
-      const totalPengeluaran = transactions.filter(t => t.type === 'keluar').reduce((sum, t) => sum + Number(t.amount), 0);
+      // Normalisasi data secara aman (Handling "Invalid Date" & property kosong)
+      const transactions = rawTransactions.filter(t => Object.keys(t).length > 0).map(normalizeTx).reverse();
+      const opnames = rawOpnames.filter(o => Object.keys(o).length > 0).map(normalizeOp).reverse();
+
+      const totalPemasukan = transactions.filter(t => t.type === 'masuk').reduce((sum, t) => sum + t.amount, 0);
+      const totalPengeluaran = transactions.filter(t => t.type === 'keluar').reduce((sum, t) => sum + t.amount, 0);
       const saldoBuku = totalPemasukan - totalPengeluaran;
 
       const submitTransaksi = (newTx) => {
-        setTransactions([...transactions, newTx]);
+        setRawTransactions([...rawTransactions, newTx]);
         fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addTransaction', ...newTx }) });
       };
 
       const submitOpname = (dataOpname) => {
-        setOpnames([dataOpname, ...opnames]);
+        setRawOpnames([...rawOpnames, dataOpname]);
         setActiveTab('approval');
         fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'submitOpname', ...dataOpname }) });
       };
 
       const updateStatus = (id, actionRole) => {
         let approverName = role === 'bendahara' ? 'Bendahara' : 'Manager';
-        setOpnames(opnames.map(op => {
-          if (op.id === id) {
-            if (actionRole === 'periksa') return { ...op, status: 'Menunggu Disetujui', diperiksaOleh: approverName };
-            if (actionRole === 'setujui') return { ...op, status: 'Selesai', diketahuiOleh: approverName };
+        setRawOpnames(rawOpnames.map(op => {
+          if (op.id === id || op.ID === id) {
+            if (actionRole === 'periksa') return { ...op, status: 'Menunggu Disetujui', diperiksaOleh: approverName, 'Diperiksa Oleh': approverName };
+            if (actionRole === 'setujui') return { ...op, status: 'Selesai', diketahuiOleh: approverName, 'Diketahui Oleh': approverName };
           }
           return op;
         }));
@@ -619,7 +653,7 @@
 
       return (
         <div className="w-full max-w-[430px] h-full bg-gradient-to-b from-slate-950 to-slate-900 flex flex-col overflow-hidden relative shadow-2xl">
-          <header className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5 flex items-center justify-between shadow-2xl animate-slide-down z-10">
+          <header className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5 flex items-center justify-between shadow-2xl z-10">
             <div>
                <h1 className="text-2xl font-bold text-white tracking-tight">KasKecil Pro</h1>
                <select value={role} onChange={e => setRole(e.target.value)} className="bg-white/20 text-blue-50 border border-white/30 px-2 py-1 mt-1.5 rounded-md text-xs font-medium outline-none backdrop-blur cursor-pointer appearance-none">
@@ -641,16 +675,16 @@
           </main>
 
           <nav className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900 to-slate-800 border-t border-slate-700/50 flex justify-around py-4 z-20 shadow-2xl">
-            <button onClick={() => setActiveTab('dashboard')} className={`flex flex-col items-center gap-1.5 tab-button ${activeTab==='dashboard'?'tab-active':'tab-inactive'}`}>
+            <button onClick={() => setActiveTab('dashboard')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='dashboard'?'tab-active':'tab-inactive'}`}>
               <IconHome /><span className="text-[10px] font-semibold">Dashboard</span>
             </button>
-            <button onClick={() => setActiveTab('transaksi')} className={`flex flex-col items-center gap-1.5 tab-button ${activeTab==='transaksi'?'tab-active':'tab-inactive'}`}>
+            <button onClick={() => setActiveTab('transaksi')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='transaksi'?'tab-active':'tab-inactive'}`}>
               <IconList /><span className="text-[10px] font-semibold">Transaksi</span>
             </button>
-            <button onClick={() => setActiveTab('opname')} className={`flex flex-col items-center gap-1.5 tab-button ${activeTab==='opname'?'tab-active':'tab-inactive'}`}>
+            <button onClick={() => setActiveTab('opname')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='opname'?'tab-active':'tab-inactive'}`}>
               <IconOpname /><span className="text-[10px] font-semibold">Opname</span>
             </button>
-            <button onClick={() => setActiveTab('approval')} className={`flex flex-col items-center gap-1.5 tab-button relative ${activeTab==='approval'?'tab-active':'tab-inactive'}`}>
+            <button onClick={() => setActiveTab('approval')} className={`flex flex-col items-center gap-1.5 tab-button btn-press relative ${activeTab==='approval'?'tab-active':'tab-inactive'}`}>
                 <IconCheckFile />
                 {opnames.filter(o => o.status !== 'Selesai').length > 0 && <span className="absolute top-0 right-2.5 w-2 h-2 bg-amber-500 rounded-full border border-slate-800"></span>}
                 <span className="text-[10px] font-semibold">Persetujuan</span>
