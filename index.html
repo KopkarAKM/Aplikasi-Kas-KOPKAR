@@ -242,6 +242,8 @@
       const [filterDate, setFilterDate] = useState('');
       const [showForm, setShowForm] = useState(false);
       const [formData, setFormData] = useState({ date: new Date().toISOString().split('T')[0], type: 'keluar', amount: '', desc: '' });
+      const [pin, setPin] = useState('');
+      const [pinError, setPinError] = useState('');
 
       const filtered = transactions.filter(t => {
         const matchesSearch = (t.desc || '').toLowerCase().includes((searchQuery || '').toLowerCase());
@@ -269,9 +271,15 @@
 
       const handleAdd = (e) => {
         e.preventDefault();
+        if (pin !== '5678') {
+          setPinError('PIN Akses salah! Transaksi ditolak.');
+          return;
+        }
+        setPinError('');
         submitTransaksi({ id: Date.now(), ...formData, amount: Number(formData.amount) });
         setShowForm(false);
         setFormData({ date: new Date().toISOString().split('T')[0], type: 'keluar', amount: '', desc: '' });
+        setPin('');
       };
 
       return (
@@ -346,7 +354,7 @@
               <div className="bg-gradient-to-b from-slate-800 to-slate-900 w-full max-w-md rounded-t-3xl md:rounded-3xl p-6 animate-slide-up border border-slate-700/50 shadow-2xl">
                 <div className="flex items-center justify-between mb-5">
                   <h2 className="font-bold text-xl text-white">Tambah Transaksi</h2>
-                  <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-white transition btn-press"><IconX /></button>
+                  <button onClick={() => { setShowForm(false); setPin(''); setPinError(''); }} className="text-slate-400 hover:text-white transition btn-press"><IconX /></button>
                 </div>
                 <form onSubmit={handleAdd} className="space-y-4">
                   <div>
@@ -368,8 +376,13 @@
                     <label className="text-sm font-semibold text-slate-300 mb-2 block">Keterangan</label>
                     <input type="text" required placeholder="Misal: Beli ATK..." className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm input-focus placeholder-slate-400" value={formData.desc} onChange={e => setFormData({...formData, desc: e.target.value})} />
                   </div>
+                  <div>
+                    <label className="text-sm font-semibold text-slate-300 mb-2 block">PIN Akses</label>
+                    <input type="password" required placeholder="****" maxLength="4" className={`w-full bg-slate-700 border rounded-xl px-4 py-3 text-white text-sm input-focus tracking-[0.5em] ${pinError ? 'border-red-500' : 'border-slate-600'}`} value={pin} onChange={e => { setPin(e.target.value); setPinError(''); }} />
+                    {pinError && <p className="text-red-400 text-xs mt-2 font-medium">{pinError}</p>}
+                  </div>
                   <div className="flex gap-3 mt-6 pt-2">
-                    <button type="button" onClick={() => setShowForm(false)} className="flex-1 py-3 rounded-xl border border-slate-600 text-white text-sm font-semibold hover:bg-slate-700 transition-all btn-press">Batal</button>
+                    <button type="button" onClick={() => { setShowForm(false); setPin(''); setPinError(''); }} className="flex-1 py-3 rounded-xl border border-slate-600 text-white text-sm font-semibold hover:bg-slate-700 transition-all btn-press">Batal</button>
                     <button type="submit" className="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-blue-600 text-white text-sm font-bold hover:shadow-lg transition-all btn-press">Simpan</button>
                   </div>
                 </form>
