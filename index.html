@@ -49,7 +49,7 @@
     }
   </style>
 </head>
-<body class="h-full bg-gradient-to-b from-slate-950 via-blue-950 to-slate-900 text-white">
+<body class="h-full bg-slate-950 text-white">
   <div id="root" class="h-full w-full flex justify-center"></div>
 
   <script type="text/babel">
@@ -97,7 +97,6 @@
       let rawDesc = descKey ? String(t[descKey]) : String(t.desc || 'Tanpa Keterangan');
       let accountName = 'Kas Koperasi';
 
-      // Ekstrak nama kas jika ada tag [Nama Kas]
       const match = rawDesc.match(/^\[(.*?)\]\s*(.*)$/);
       if (match) {
           accountName = match[1];
@@ -154,77 +153,77 @@
     };
 
     const Dashboard = ({ transactions, saldoBuku, totalPemasukan, totalPengeluaran, setActiveTab }) => {
-      const recent = transactions.slice(0, 3);
+      const recent = transactions.slice(0, 5);
       const statusColor = saldoBuku >= 0 ? 'from-emerald-500 to-teal-600' : 'from-red-500 to-orange-600';
 
       return (
-        <div className="p-4 space-y-4 animate-fade-in pb-28">
-          <div className={`bg-gradient-to-br ${statusColor} rounded-2xl p-6 text-white shadow-2xl animate-scale-in transform transition-all duration-300`}>
+        <div className="p-4 md:p-6 space-y-6 animate-fade-in pb-28 md:pb-6">
+          <div className={`bg-gradient-to-br ${statusColor} rounded-2xl p-6 md:p-8 text-white shadow-2xl animate-scale-in transform transition-all duration-300`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm opacity-90 font-medium">💰 Saldo Buku Anda</p>
-                <p className="text-3xl font-bold mt-2 tracking-tight">{formatRp(saldoBuku)}</p>
-                <p className="text-xs opacity-75 mt-3">Sesuai Data Terkini</p>
+                <p className="text-sm md:text-base opacity-90 font-medium">💰 Saldo Buku Anda</p>
+                <p className="text-3xl md:text-4xl font-bold mt-2 tracking-tight">{formatRp(saldoBuku)}</p>
+                <p className="text-xs md:text-sm opacity-75 mt-3">Sesuai Data Terkini</p>
               </div>
-              <div className="text-5xl opacity-20">{saldoBuku >= 0 ? '📈' : '📉'}</div>
+              <div className="text-5xl md:text-7xl opacity-20">{saldoBuku >= 0 ? '📈' : '📉'}</div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-500/30 rounded-xl p-4 shadow-lg card-hover animate-scale-in" style={{animationDelay: '0.1s'}}>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-500/30 rounded-xl p-5 shadow-lg card-hover animate-scale-in" style={{animationDelay: '0.1s'}}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-emerald-200 uppercase font-semibold tracking-wide">Pemasukan</p>
-                  <p className="text-lg font-bold text-emerald-400 mt-2">{formatRp(totalPemasukan)}</p>
+                  <p className="text-xs md:text-sm text-emerald-200 uppercase font-semibold tracking-wide">Pemasukan</p>
+                  <p className="text-lg md:text-xl font-bold text-emerald-400 mt-2">{formatRp(totalPemasukan)}</p>
                 </div>
                 <div className="text-emerald-400 opacity-30"><IconArrowDownLeft /></div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-red-500/20 to-red-600/20 border border-red-500/30 rounded-xl p-4 shadow-lg card-hover animate-scale-in" style={{animationDelay: '0.15s'}}>
+            <div className="bg-gradient-to-br from-red-500/20 to-red-600/20 border border-red-500/30 rounded-xl p-5 shadow-lg card-hover animate-scale-in" style={{animationDelay: '0.15s'}}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-red-200 uppercase font-semibold tracking-wide">Pengeluaran</p>
-                  <p className="text-lg font-bold text-red-400 mt-2">{formatRp(totalPengeluaran)}</p>
+                  <p className="text-xs md:text-sm text-red-200 uppercase font-semibold tracking-wide">Pengeluaran</p>
+                  <p className="text-lg md:text-xl font-bold text-red-400 mt-2">{formatRp(totalPengeluaran)}</p>
                 </div>
                 <div className="text-red-400 opacity-30"><IconArrowUpRight /></div>
               </div>
             </div>
           </div>
 
-          <div className="animate-fade-in mt-4">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+          <div className="animate-fade-in mt-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm md:text-base font-bold text-white flex items-center gap-2">
                 <span className="dot bg-blue-400"></span> Transaksi Terbaru
               </h3>
-              <button onClick={() => setActiveTab('transaksi')} className="text-xs text-blue-400 hover:text-blue-300 font-semibold cursor-pointer btn-press">Lihat Semua →</button>
+              <button onClick={() => setActiveTab('transaksi')} className="text-xs md:text-sm text-blue-400 hover:text-blue-300 font-semibold cursor-pointer btn-press">Lihat Semua →</button>
             </div>
             
             {recent.length === 0 ? (
-              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 text-center">
-                <div className="flex justify-center text-slate-600 mb-2"><IconInbox /></div>
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 text-center">
+                <div className="flex justify-center text-slate-600 mb-3"><IconInbox /></div>
                 <p className="text-sm text-slate-400">Belum ada transaksi</p>
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {recent.map((t, index) => {
                   const isIn = t.type === 'masuk';
                   return (
                     <div key={t.id} className={`bg-gradient-to-r ${isIn ? 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40' : 'from-red-900/30 to-orange-900/20 border-red-700/40'} border rounded-xl p-4 shadow-lg card-hover transaction-enter`} style={{animationDelay: `${index * 0.08}s`}}>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-full ${isIn ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-red-500 to-orange-600'} flex items-center justify-center shadow-lg text-white`}>
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${isIn ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-red-500 to-orange-600'} flex items-center justify-center shadow-lg text-white`}>
                             {isIn ? <IconArrowDownLeft /> : <IconArrowUpRight />}
                           </div>
                           <div>
-                            <p className="text-sm font-semibold text-white truncate max-w-[150px]">{t.desc}</p>
+                            <p className="text-sm md:text-base font-semibold text-white truncate max-w-[150px] md:max-w-[300px]">{t.desc}</p>
                             <div className="flex items-center gap-2 mt-1">
                               <span className={`dot ${isIn ? 'bg-emerald-400/50' : 'bg-red-400/50'}`}></span>
-                              <span className="text-xs text-slate-400">{formatDate(t.date)}</span>
+                              <span className="text-xs md:text-sm text-slate-400">{formatDate(t.date)}</span>
                             </div>
                           </div>
                         </div>
                         <div className="text-right whitespace-nowrap">
-                          <p className={`text-sm font-bold ${isIn ? 'text-emerald-400' : 'text-red-400'}`}>{isIn ? '+' : '-'}{formatRp(t.amount)}</p>
+                          <p className={`text-sm md:text-base font-bold ${isIn ? 'text-emerald-400' : 'text-red-400'}`}>{isIn ? '+' : '-'}{formatRp(t.amount)}</p>
                         </div>
                       </div>
                     </div>
@@ -247,7 +246,6 @@
       const filtered = transactions.filter(t => {
         const matchesSearch = (t.desc || '').toLowerCase().includes((searchQuery || '').toLowerCase());
         if (!matchesSearch) return false;
-
         if (filterType === 'all') return true;
 
         const txDate = new Date(t.date);
@@ -266,7 +264,6 @@
           const fDate = new Date(filterDate);
           return txDate.getFullYear() === fDate.getFullYear() && txDate.getMonth() === fDate.getMonth() && txDate.getDate() === fDate.getDate();
         }
-
         return true;
       });
 
@@ -278,14 +275,14 @@
       };
 
       return (
-        <div className="p-4 space-y-4 pb-28 h-full flex flex-col">
+        <div className="p-4 md:p-6 space-y-4 pb-28 md:pb-6 h-full flex flex-col relative">
           <div className="flex gap-2 animate-slide-down z-10 relative">
             <div className="relative flex-1">
               <div className="absolute left-3 top-3 text-slate-500"><IconSearch /></div>
-              <input type="text" placeholder="🔍 Cari..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white text-sm placeholder-slate-500 input-focus" />
+              <input type="text" placeholder="🔍 Cari transaksi..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white text-sm md:text-base placeholder-slate-500 input-focus" />
             </div>
-            <div className="relative min-w-[110px]">
-              <select value={filterType} onChange={e => setFilterType(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-2.5 text-white text-sm input-focus appearance-none cursor-pointer outline-none">
+            <div className="relative min-w-[110px] md:min-w-[150px]">
+              <select value={filterType} onChange={e => setFilterType(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl px-2 py-2.5 text-white text-sm md:text-base input-focus appearance-none cursor-pointer outline-none">
                 <option value="month">Bulan Ini</option>
                 <option value="today">Hari Ini</option>
                 <option value="week">7 Hari</option>
@@ -302,52 +299,56 @@
             </div>
           )}
 
-          <div className="space-y-2 flex-1">
+          <div className="space-y-3 flex-1 overflow-y-auto pr-1">
             {filtered.length === 0 ? (
               <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 text-center mt-8">
                 <div className="flex justify-center text-slate-600 mb-3"><IconSearch /></div>
                 <p className="text-sm text-slate-400">Tidak ada transaksi ditemukan</p>
               </div>
             ) : (
-              filtered.map((t, index) => {
-                const isIn = t.type === 'masuk';
-                return (
-                  <div key={t.id} className={`bg-gradient-to-r ${isIn ? 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40' : 'from-red-900/30 to-orange-900/20 border-red-700/40'} border rounded-xl p-4 shadow-lg card-hover transaction-enter`} style={{animationDelay: `${index * 0.05}s`}}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-full ${isIn ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-red-500 to-orange-600'} flex items-center justify-center shadow-lg text-white`}>
-                          {isIn ? <IconArrowDownLeft /> : <IconArrowUpRight />}
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-white">{t.desc}</p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className={`dot ${isIn ? 'bg-emerald-400/50' : 'bg-red-400/50'}`}></span>
-                            <span className="text-xs text-slate-400">{formatDate(t.date)}</span>
+              <div className="grid grid-cols-1 gap-3">
+                {filtered.map((t, index) => {
+                  const isIn = t.type === 'masuk';
+                  return (
+                    <div key={t.id} className={`bg-gradient-to-r ${isIn ? 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40' : 'from-red-900/30 to-orange-900/20 border-red-700/40'} border rounded-xl p-4 shadow-lg card-hover transaction-enter`} style={{animationDelay: `${index * 0.05}s`}}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${isIn ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-red-500 to-orange-600'} flex items-center justify-center shadow-lg text-white`}>
+                            {isIn ? <IconArrowDownLeft /> : <IconArrowUpRight />}
+                          </div>
+                          <div>
+                            <p className="text-sm md:text-base font-semibold text-white">{t.desc}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className={`dot ${isIn ? 'bg-emerald-400/50' : 'bg-red-400/50'}`}></span>
+                              <span className="text-xs md:text-sm text-slate-400">{formatDate(t.date)}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="text-right">
-                        <p className={`text-sm font-bold ${isIn ? 'text-emerald-400' : 'text-red-400'}`}>{isIn ? '+' : '-'}{formatRp(t.amount)}</p>
+                        <div className="text-right">
+                          <p className={`text-sm md:text-base font-bold ${isIn ? 'text-emerald-400' : 'text-red-400'}`}>{isIn ? '+' : '-'}{formatRp(t.amount)}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
+                  );
+                })}
+              </div>
             )}
           </div>
 
-          <button onClick={() => setShowForm(true)} className="absolute bottom-24 right-6 w-14 h-14 bg-gradient-to-br from-emerald-400 to-blue-600 rounded-full shadow-2xl flex items-center justify-center text-white z-20 btn-press hover:shadow-emerald-500/50 hover:shadow-2xl">
+          {/* Desktop/Mobile FAB positioning */}
+          <button onClick={() => setShowForm(true)} className="absolute bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-emerald-400 to-blue-600 rounded-full shadow-2xl flex items-center justify-center text-white z-20 btn-press hover:shadow-emerald-500/50 hover:shadow-2xl">
             <IconPlus />
           </button>
 
+          {/* Modal Form - Centered on Desktop */}
           {showForm && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-end animate-fade-in max-w-md mx-auto">
-              <div className="bg-gradient-to-b from-slate-800 to-slate-900 w-full rounded-t-3xl p-6 animate-slide-up border-t border-slate-700/50 shadow-2xl">
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center animate-fade-in p-0 md:p-4">
+              <div className="bg-gradient-to-b from-slate-800 to-slate-900 w-full max-w-md rounded-t-3xl md:rounded-3xl p-6 animate-slide-up border border-slate-700/50 shadow-2xl">
                 <div className="flex items-center justify-between mb-5">
                   <h2 className="font-bold text-xl text-white">Tambah Transaksi</h2>
                   <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-white transition btn-press"><IconX /></button>
                 </div>
-                <form onSubmit={handleAdd} className="space-y-3">
+                <form onSubmit={handleAdd} className="space-y-4">
                   <div>
                     <label className="text-sm font-semibold text-slate-300 mb-2 block">Tanggal</label>
                     <input type="date" required className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm input-focus placeholder-slate-400 style-color-scheme-dark" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} style={{ colorScheme: 'dark' }} />
@@ -399,45 +400,49 @@
       };
 
       return (
-        <div className="p-4 space-y-4 pb-28 animate-fade-in">
-          <div className="bg-blue-900/40 p-4 rounded-xl flex justify-between items-center border border-blue-500/30">
-            <span className="text-sm font-medium text-blue-200">Saldo Pembukuan</span>
-            <span className="text-lg font-bold text-blue-400">{formatRp(saldoBuku)}</span>
+        <div className="p-4 md:p-6 space-y-4 pb-28 md:pb-6 animate-fade-in">
+          <div className="bg-blue-900/40 p-5 rounded-xl flex justify-between items-center border border-blue-500/30">
+            <span className="text-sm md:text-base font-medium text-blue-200">Saldo Pembukuan</span>
+            <span className="text-lg md:text-2xl font-bold text-blue-400">{formatRp(saldoBuku)}</span>
           </div>
 
-          <div className="bg-slate-800/80 rounded-xl shadow-lg border border-slate-700/50 p-4 space-y-3">
-            <h3 className="font-bold border-b border-slate-600 pb-2 text-slate-200">Lembar Uang Kertas</h3>
-            {Object.keys(kertas).sort((a,b)=>b-a).map(k => (
-              <div key={k} className="flex justify-between items-center py-1">
-                <span className="w-1/3 text-sm text-slate-400">{formatRp(k)}</span>
-                <input type="number" min="0" placeholder="0" className="w-1/3 bg-slate-700 border border-slate-600 rounded-md text-center p-1.5 text-white input-focus" value={kertas[k]} onChange={e => setKertas({...kertas, [k]: e.target.value})} />
-                <span className="w-1/3 text-right font-medium text-sm text-emerald-400">{formatRp(k * (kertas[k]||0))}</span>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="bg-slate-800/80 rounded-xl shadow-lg border border-slate-700/50 p-5 space-y-3">
+              <h3 className="font-bold border-b border-slate-600 pb-2 text-slate-200">Lembar Uang Kertas</h3>
+              {Object.keys(kertas).sort((a,b)=>b-a).map(k => (
+                <div key={k} className="flex justify-between items-center py-1.5">
+                  <span className="w-1/3 text-sm text-slate-400">{formatRp(k)}</span>
+                  <input type="number" min="0" placeholder="0" className="w-1/3 bg-slate-700 border border-slate-600 rounded-md text-center p-2 text-white input-focus" value={kertas[k]} onChange={e => setKertas({...kertas, [k]: e.target.value})} />
+                  <span className="w-1/3 text-right font-medium text-sm md:text-base text-emerald-400">{formatRp(k * (kertas[k]||0))}</span>
+                </div>
+              ))}
+            </div>
             
-            <h3 className="font-bold border-b border-slate-600 pb-2 pt-4 text-slate-200">Keping Uang Logam</h3>
-            {Object.keys(logam).sort((a,b)=>b-a).map(l => (
-              <div key={l} className="flex justify-between items-center py-1">
-                <span className="w-1/3 text-sm text-slate-400">{formatRp(l)}</span>
-                <input type="number" min="0" placeholder="0" className="w-1/3 bg-slate-700 border border-slate-600 rounded-md text-center p-1.5 text-white input-focus" value={logam[l]} onChange={e => setLogam({...logam, [l]: e.target.value})} />
-                <span className="w-1/3 text-right font-medium text-sm text-emerald-400">{formatRp(l * (logam[l]||0))}</span>
-              </div>
-            ))}
+            <div className="bg-slate-800/80 rounded-xl shadow-lg border border-slate-700/50 p-5 space-y-3 h-fit">
+              <h3 className="font-bold border-b border-slate-600 pb-2 text-slate-200">Keping Uang Logam</h3>
+              {Object.keys(logam).sort((a,b)=>b-a).map(l => (
+                <div key={l} className="flex justify-between items-center py-1.5">
+                  <span className="w-1/3 text-sm text-slate-400">{formatRp(l)}</span>
+                  <input type="number" min="0" placeholder="0" className="w-1/3 bg-slate-700 border border-slate-600 rounded-md text-center p-2 text-white input-focus" value={logam[l]} onChange={e => setLogam({...logam, [l]: e.target.value})} />
+                  <span className="w-1/3 text-right font-medium text-sm md:text-base text-emerald-400">{formatRp(l * (logam[l]||0))}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-4 shadow-xl border border-slate-700">
-            <div className="flex justify-between items-center"><span className="text-sm text-slate-300">Total Kas Fisik</span><span className="text-xl font-bold text-white">{formatRp(totalFisik)}</span></div>
-            <div className="flex justify-between mt-3 pt-3 border-t border-slate-700 items-center">
-              <span className="text-sm text-slate-300">Selisih Kas</span>
-              <span className={`text-lg font-bold ${selisih < 0 ? 'text-red-400' : selisih > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>{selisih > 0 ? '+' : ''}{formatRp(selisih)}</span>
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-5 shadow-xl border border-slate-700 mt-4">
+            <div className="flex justify-between items-center"><span className="text-sm md:text-base text-slate-300">Total Kas Fisik</span><span className="text-xl md:text-2xl font-bold text-white">{formatRp(totalFisik)}</span></div>
+            <div className="flex justify-between mt-4 pt-4 border-t border-slate-700 items-center">
+              <span className="text-sm md:text-base text-slate-300">Selisih Kas</span>
+              <span className={`text-lg md:text-xl font-bold ${selisih < 0 ? 'text-red-400' : selisih > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>{selisih > 0 ? '+' : ''}{formatRp(selisih)}</span>
             </div>
           </div>
 
           {selisih !== 0 && (
-            <textarea className="w-full bg-slate-800 border border-red-500/50 focus:border-red-500 rounded-lg p-3 text-white outline-none placeholder-slate-500" rows="3" placeholder="Wajib ketik alasan selisih di sini..." value={keteranganSelisih} onChange={e => setKeteranganSelisih(e.target.value)} />
+            <textarea className="w-full bg-slate-800 border border-red-500/50 focus:border-red-500 rounded-xl p-4 text-white outline-none placeholder-slate-500" rows="3" placeholder="Wajib ketik alasan selisih di sini..." value={keteranganSelisih} onChange={e => setKeteranganSelisih(e.target.value)} />
           )}
 
-          <button onClick={handleKirim} disabled={selisih !== 0 && !keteranganSelisih.trim()} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg btn-press">Kirim Laporan Opname</button>
+          <button onClick={handleKirim} disabled={selisih !== 0 && !keteranganSelisih.trim()} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold py-3.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg btn-press text-base">Kirim Laporan Opname</button>
         </div>
       );
     };
@@ -447,81 +452,83 @@
       const doneCount = opnames.filter(o => o.status === 'Selesai').length;
 
       return (
-        <div className="p-4 space-y-4 pb-28 animate-fade-in">
-          <div className="flex gap-2 mb-4">
-            <div className="flex-1 bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-600/30 rounded-lg p-3 animate-scale-in">
-              <p className="text-xs text-amber-200 font-semibold">⏳ Menunggu</p>
-              <p className="text-2xl font-bold text-amber-400 mt-1">{pendingCount}</p>
+        <div className="p-4 md:p-6 space-y-4 pb-28 md:pb-6 animate-fade-in">
+          <div className="flex gap-4 mb-6">
+            <div className="flex-1 bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-600/30 rounded-xl p-4 animate-scale-in">
+              <p className="text-xs md:text-sm text-amber-200 font-semibold">⏳ Menunggu</p>
+              <p className="text-2xl md:text-3xl font-bold text-amber-400 mt-2">{pendingCount}</p>
             </div>
-            <div className="flex-1 bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-600/30 rounded-lg p-3 animate-scale-in" style={{animationDelay: '0.1s'}}>
-              <p className="text-xs text-emerald-200 font-semibold">✓ Selesai</p>
-              <p className="text-2xl font-bold text-emerald-400 mt-1">{doneCount}</p>
+            <div className="flex-1 bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-600/30 rounded-xl p-4 animate-scale-in" style={{animationDelay: '0.1s'}}>
+              <p className="text-xs md:text-sm text-emerald-200 font-semibold">✓ Selesai</p>
+              <p className="text-2xl md:text-3xl font-bold text-emerald-400 mt-2">{doneCount}</p>
             </div>
           </div>
 
           {opnames.length === 0 && <div className="text-center py-10 text-slate-500 text-sm">Belum ada data Cash Opname.</div>}
           
-          {opnames.map((op, i) => {
-            const isPending = op.status !== 'Selesai';
-            return (
-              <div key={op.id} className={`bg-gradient-to-r ${isPending ? 'from-amber-900/30 to-orange-900/20 border-amber-700/40' : 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40'} border rounded-xl p-4 shadow-lg card-hover transaction-enter`} style={{animationDelay: `${i * 0.1}s`}}>
-                <div className="flex justify-between items-start border-b border-slate-700/50 pb-3 mb-3">
-                  <div className="flex items-start gap-3 flex-1">
-                    <div className={`w-10 h-10 rounded-full ${isPending ? 'bg-amber-500/20 border border-amber-500/40 text-amber-400' : 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400'} flex items-center justify-center`}>
-                      {isPending ? <IconClock /> : <IconCheckCircle />}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {opnames.map((op, i) => {
+              const isPending = op.status !== 'Selesai';
+              return (
+                <div key={op.id} className={`bg-gradient-to-r ${isPending ? 'from-amber-900/30 to-orange-900/20 border-amber-700/40' : 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40'} border rounded-xl p-5 shadow-lg card-hover transaction-enter flex flex-col`} style={{animationDelay: `${i * 0.1}s`}}>
+                  <div className="flex justify-between items-start border-b border-slate-700/50 pb-4 mb-4">
+                    <div className="flex items-start gap-4 flex-1">
+                      <div className={`w-12 h-12 rounded-full ${isPending ? 'bg-amber-500/20 border border-amber-500/40 text-amber-400' : 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400'} flex items-center justify-center`}>
+                        {isPending ? <IconClock /> : <IconCheckCircle />}
+                      </div>
+                      <div>
+                          <p className="text-base font-semibold text-white">Opname Kas</p>
+                          <p className="text-sm text-slate-400 mt-1">📅 {formatDate(op.date)}</p>
+                      </div>
                     </div>
-                    <div>
-                        <p className="text-sm font-semibold text-white">Opname Kas</p>
-                        <p className="text-xs text-slate-400 mt-1">📅 {formatDate(op.date)}</p>
+                    <span className={`text-[10px] md:text-xs px-3 py-1.5 rounded-full font-bold uppercase ml-2 text-center ${
+                        op.status === 'Selesai' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
+                        op.status === 'Menunggu Disetujui' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
+                        'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                      }`}>{op.status}</span>
+                  </div>
+                  
+                  <div className="text-sm md:text-base grid grid-cols-2 gap-3 py-2 text-slate-300 flex-1">
+                    <span className="text-slate-400">Saldo Buku:</span>
+                    <span className="text-right font-medium text-white">{formatRp(op.saldoBuku)}</span>
+                    <span className="text-slate-400">Fisik Uang:</span>
+                    <span className="text-right font-medium text-white">{formatRp(op.saldoFisik)}</span>
+                    <span className="text-slate-400">Selisih:</span>
+                    <span className={`text-right font-bold ${op.selisih < 0 ? 'text-red-400' : op.selisih > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>{formatRp(op.selisih)}</span>
+                  </div>
+
+                  {op.selisih !== 0 && (
+                    <div className="bg-red-500/10 p-3 rounded-lg text-sm text-red-300 border border-red-500/30 mt-3">
+                        <strong>Ket:</strong> {op.keterangan}
+                    </div>
+                  )}
+
+                  <div className="bg-slate-900/50 p-4 rounded-xl text-sm space-y-3 mt-4 border border-slate-700/50">
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>Dibuat Oleh:</span><span className="font-bold text-white">{op.user}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>Diperiksa Oleh:</span><span className="font-bold text-white">{op.diperiksaOleh}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>Diketahui Oleh:</span><span className="font-bold text-white">{op.diketahuiOleh}</span>
                     </div>
                   </div>
-                  <span className={`text-[10px] px-2 py-1 rounded-full font-bold uppercase ml-2 ${
-                      op.status === 'Selesai' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
-                      op.status === 'Menunggu Disetujui' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
-                      'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                    }`}>{op.status}</span>
+
+                  <button onClick={() => handlePrint(op)} className="w-full bg-slate-700 text-white border border-slate-600 py-3 rounded-xl font-bold text-sm mt-4 flex justify-center items-center gap-2 hover:bg-slate-600 transition-colors btn-press">
+                    <IconPrint /> Cetak PDF Laporan
+                  </button>
+
+                  {role === 'bendahara' && op.status === 'Menunggu Diperiksa' && (
+                    <button onClick={() => updateStatus(op.id, 'periksa')} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-xl font-bold text-sm mt-3 shadow-lg btn-press">Tandai Diperiksa</button>
+                  )}
+                  {role === 'manager' && op.status === 'Menunggu Disetujui' && (
+                    <button onClick={() => updateStatus(op.id, 'setujui')} className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-xl font-bold text-sm mt-3 shadow-lg btn-press">Setujui Opname</button>
+                  )}
                 </div>
-                
-                <div className="text-sm grid grid-cols-2 gap-2 py-2 text-slate-300">
-                  <span className="text-slate-400">Saldo Buku:</span>
-                  <span className="text-right font-medium text-white">{formatRp(op.saldoBuku)}</span>
-                  <span className="text-slate-400">Fisik Uang:</span>
-                  <span className="text-right font-medium text-white">{formatRp(op.saldoFisik)}</span>
-                  <span className="text-slate-400">Selisih:</span>
-                  <span className={`text-right font-bold ${op.selisih < 0 ? 'text-red-400' : op.selisih > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>{formatRp(op.selisih)}</span>
-                </div>
-
-                {op.selisih !== 0 && (
-                  <div className="bg-red-500/10 p-2 rounded text-xs text-red-300 border border-red-500/30 mt-2">
-                      <strong>Ket:</strong> {op.keterangan}
-                  </div>
-                )}
-
-                <div className="bg-slate-900/50 p-3 rounded-lg text-xs space-y-2 mt-3 border border-slate-700/50">
-                  <div className="flex justify-between items-center text-slate-300">
-                    <span>Dibuat Oleh:</span><span className="font-bold text-white">{op.user}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-slate-300">
-                    <span>Diperiksa Oleh:</span><span className="font-bold text-white">{op.diperiksaOleh}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-slate-300">
-                    <span>Diketahui Oleh:</span><span className="font-bold text-white">{op.diketahuiOleh}</span>
-                  </div>
-                </div>
-
-                <button onClick={() => handlePrint(op)} className="w-full bg-slate-700 text-white border border-slate-600 py-2.5 rounded-lg font-bold text-sm mt-3 flex justify-center items-center gap-2 hover:bg-slate-600 transition-colors btn-press">
-                  <IconPrint /> Cetak PDF Laporan
-                </button>
-
-                {role === 'bendahara' && op.status === 'Menunggu Diperiksa' && (
-                  <button onClick={() => updateStatus(op.id, 'periksa')} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-2.5 rounded-lg font-bold text-sm mt-2 shadow-lg btn-press">Tandai Diperiksa</button>
-                )}
-                {role === 'manager' && op.status === 'Menunggu Disetujui' && (
-                  <button onClick={() => updateStatus(op.id, 'setujui')} className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-2.5 rounded-lg font-bold text-sm mt-2 shadow-lg btn-press">Setujui Opname</button>
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       );
     };
@@ -765,55 +772,96 @@
       }
 
       return (
-        <div className="w-full max-w-[430px] h-full bg-gradient-to-b from-slate-950 to-slate-900 flex flex-col overflow-hidden relative shadow-2xl">
-          <header className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 pt-5 pb-3 shadow-2xl z-10">
-            <div className="flex items-center justify-between">
-              <div>
-                 <h1 className="text-2xl font-bold text-white tracking-tight">KasKecil Pro</h1>
-                 <select value={role} onChange={e => setRole(e.target.value)} className="bg-white/20 text-blue-50 border border-white/30 px-2 py-1 mt-1.5 rounded-md text-xs font-medium outline-none backdrop-blur cursor-pointer appearance-none">
-                    <option value="kasir" className="text-slate-800">👤 Kasir</option>
-                    <option value="bendahara" className="text-slate-800">💰 Bendahara</option>
-                    <option value="manager" className="text-slate-800">👑 Manager</option>
+        <div className="flex h-full w-full bg-slate-950 justify-center">
+          <div className="flex w-full max-w-6xl h-full relative overflow-hidden bg-slate-900 shadow-2xl">
+            
+            {/* Sidebar untuk mode PC/Desktop */}
+            <aside className="hidden md:flex w-64 flex-col bg-slate-950 border-r border-slate-800 z-20">
+              <div className="p-6 pb-2">
+                <h1 className="text-2xl font-bold text-white tracking-tight">KasKecil Pro</h1>
+              </div>
+              <div className="px-6 py-4">
+                 <select value={role} onChange={e => setRole(e.target.value)} className="w-full bg-slate-800 text-blue-50 border border-slate-700 px-3 py-2 rounded-lg text-sm font-medium outline-none cursor-pointer">
+                    <option value="kasir">👤 Kasir</option>
+                    <option value="bendahara">💰 Bendahara</option>
+                    <option value="manager">👑 Manager</option>
                  </select>
               </div>
-              <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white font-bold text-xl border border-white/30 shadow-lg uppercase">
-                 {role.charAt(0)}
-              </div>
-            </div>
-            
-            {/* Account Selector Horizontal Tab */}
-            <div className="mt-4 flex gap-2 overflow-x-auto whitespace-nowrap hide-scrollbar pb-1">
-              {accounts.map(acc => (
-                <button key={acc} onClick={() => setActiveAccount(acc)} className={`px-4 py-2 rounded-full text-xs font-bold transition-all btn-press border ${activeAccount === acc ? 'bg-white text-blue-600 shadow-lg border-white' : 'bg-blue-600/30 text-blue-100 border-blue-400/50 hover:bg-blue-600/50'}`}>
-                  {acc}
+              <nav className="flex-1 px-4 space-y-3 mt-4">
+                <button onClick={() => setActiveTab('dashboard')} className={`flex items-center gap-3 w-full p-3 rounded-xl transition-all btn-press ${activeTab === 'dashboard' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+                  <IconHome /> <span className="font-semibold text-sm">Dashboard</span>
                 </button>
-              ))}
+                <button onClick={() => setActiveTab('transaksi')} className={`flex items-center gap-3 w-full p-3 rounded-xl transition-all btn-press ${activeTab === 'transaksi' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+                  <IconList /> <span className="font-semibold text-sm">Transaksi</span>
+                </button>
+                <button onClick={() => setActiveTab('opname')} className={`flex items-center gap-3 w-full p-3 rounded-xl transition-all btn-press ${activeTab === 'opname' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+                  <IconOpname /> <span className="font-semibold text-sm">Opname Kas</span>
+                </button>
+                <button onClick={() => setActiveTab('approval')} className={`flex items-center justify-between w-full p-3 rounded-xl transition-all btn-press ${activeTab === 'approval' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+                  <div className="flex items-center gap-3"><IconCheckFile /> <span className="font-semibold text-sm">Persetujuan</span></div>
+                  {opnames.filter(o => o.status !== 'Selesai').length > 0 && <span className="w-2 h-2 bg-amber-500 rounded-full"></span>}
+                </button>
+              </nav>
+            </aside>
+
+            {/* Area Konten Utama */}
+            <div className="flex-1 flex flex-col h-full relative w-full">
+              {/* Header Atas (Kompak di Desktop, Normal di Mobile) */}
+              <header className="bg-gradient-to-r from-blue-600 to-blue-500 px-4 md:px-8 pt-5 pb-3 shadow-md z-10">
+                <div className="flex items-center justify-between md:hidden">
+                  <div>
+                    <h1 className="text-2xl font-bold text-white tracking-tight">KasKecil Pro</h1>
+                    <select value={role} onChange={e => setRole(e.target.value)} className="bg-white/20 text-blue-50 border border-white/30 px-2 py-1 mt-1.5 rounded-md text-xs font-medium outline-none backdrop-blur cursor-pointer appearance-none">
+                        <option value="kasir" className="text-slate-800">👤 Kasir</option>
+                        <option value="bendahara" className="text-slate-800">💰 Bendahara</option>
+                        <option value="manager" className="text-slate-800">👑 Manager</option>
+                    </select>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white font-bold text-xl border border-white/30 shadow-lg uppercase">
+                    {role.charAt(0)}
+                  </div>
+                </div>
+
+                <div className="hidden md:block">
+                   <h2 className="text-xl font-bold text-white tracking-tight">Pilih Pembukuan Kas</h2>
+                </div>
+                
+                {/* Horizontal Tab Pilihan Kas */}
+                <div className="mt-4 md:mt-3 flex gap-2 overflow-x-auto whitespace-nowrap hide-scrollbar pb-1">
+                  {accounts.map(acc => (
+                    <button key={acc} onClick={() => setActiveAccount(acc)} className={`px-4 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all btn-press border ${activeAccount === acc ? 'bg-white text-blue-600 shadow-lg border-white' : 'bg-blue-600/30 text-blue-100 border-blue-400/50 hover:bg-blue-600/50'}`}>
+                      {acc}
+                    </button>
+                  ))}
+                </div>
+              </header>
+
+              <main className="flex-1 overflow-y-auto w-full mx-auto" style={{ scrollBehavior: 'smooth' }}>
+                {activeTab === 'dashboard' && <Dashboard transactions={transactions} saldoBuku={saldoBuku} totalPemasukan={totalPemasukan} totalPengeluaran={totalPengeluaran} setActiveTab={setActiveTab} />}
+                {activeTab === 'transaksi' && <TransaksiView transactions={transactions} submitTransaksi={submitTransaksi} />}
+                {activeTab === 'opname' && <CashOpnameView saldoBuku={saldoBuku} submitOpname={submitOpname} />}
+                {activeTab === 'approval' && <ApprovalView opnames={opnames} role={role} updateStatus={updateStatus} handlePrint={setPrintData} />}
+              </main>
+
+              {/* Navigasi Bawah khusus Mobile */}
+              <nav className="md:hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900 to-slate-800 border-t border-slate-700/50 flex justify-around py-4 z-20 shadow-2xl">
+                <button onClick={() => setActiveTab('dashboard')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='dashboard'?'tab-active':'tab-inactive'}`}>
+                  <IconHome /><span className="text-[10px] font-semibold">Dashboard</span>
+                </button>
+                <button onClick={() => setActiveTab('transaksi')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='transaksi'?'tab-active':'tab-inactive'}`}>
+                  <IconList /><span className="text-[10px] font-semibold">Transaksi</span>
+                </button>
+                <button onClick={() => setActiveTab('opname')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='opname'?'tab-active':'tab-inactive'}`}>
+                  <IconOpname /><span className="text-[10px] font-semibold">Opname</span>
+                </button>
+                <button onClick={() => setActiveTab('approval')} className={`flex flex-col items-center gap-1.5 tab-button btn-press relative ${activeTab==='approval'?'tab-active':'tab-inactive'}`}>
+                    <IconCheckFile />
+                    {opnames.filter(o => o.status !== 'Selesai').length > 0 && <span className="absolute top-0 right-2.5 w-2 h-2 bg-amber-500 rounded-full border border-slate-800"></span>}
+                    <span className="text-[10px] font-semibold">Persetujuan</span>
+                </button>
+              </nav>
             </div>
-          </header>
-
-          <main className="flex-1 overflow-y-auto" style={{ scrollBehavior: 'smooth' }}>
-            {activeTab === 'dashboard' && <Dashboard transactions={transactions} saldoBuku={saldoBuku} totalPemasukan={totalPemasukan} totalPengeluaran={totalPengeluaran} setActiveTab={setActiveTab} />}
-            {activeTab === 'transaksi' && <TransaksiView transactions={transactions} submitTransaksi={submitTransaksi} />}
-            {activeTab === 'opname' && <CashOpnameView saldoBuku={saldoBuku} submitOpname={submitOpname} />}
-            {activeTab === 'approval' && <ApprovalView opnames={opnames} role={role} updateStatus={updateStatus} handlePrint={setPrintData} />}
-          </main>
-
-          <nav className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900 to-slate-800 border-t border-slate-700/50 flex justify-around py-4 z-20 shadow-2xl">
-            <button onClick={() => setActiveTab('dashboard')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='dashboard'?'tab-active':'tab-inactive'}`}>
-              <IconHome /><span className="text-[10px] font-semibold">Dashboard</span>
-            </button>
-            <button onClick={() => setActiveTab('transaksi')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='transaksi'?'tab-active':'tab-inactive'}`}>
-              <IconList /><span className="text-[10px] font-semibold">Transaksi</span>
-            </button>
-            <button onClick={() => setActiveTab('opname')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='opname'?'tab-active':'tab-inactive'}`}>
-              <IconOpname /><span className="text-[10px] font-semibold">Opname</span>
-            </button>
-            <button onClick={() => setActiveTab('approval')} className={`flex flex-col items-center gap-1.5 tab-button btn-press relative ${activeTab==='approval'?'tab-active':'tab-inactive'}`}>
-                <IconCheckFile />
-                {opnames.filter(o => o.status !== 'Selesai').length > 0 && <span className="absolute top-0 right-2.5 w-2 h-2 bg-amber-500 rounded-full border border-slate-800"></span>}
-                <span className="text-[10px] font-semibold">Persetujuan</span>
-            </button>
-          </nav>
+          </div>
         </div>
       );
     }
