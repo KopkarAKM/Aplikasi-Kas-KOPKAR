@@ -130,9 +130,19 @@
 
       let pecahanData = {};
       try {
-        const rawPecahan = pecahanKey ? op[pecahanKey] : op.pecahan;
-        pecahanData = typeof rawPecahan === 'string' ? JSON.parse(rawPecahan || '{}') : (rawPecahan || {});
-      } catch(e) {}
+        let rawPecahan = pecahanKey ? op[pecahanKey] : op.pecahan;
+        if (typeof rawPecahan === 'string') {
+          pecahanData = JSON.parse(rawPecahan);
+          // Menangani data lama yang terlanjur ter-stringify dua kali oleh sistem
+          if (typeof pecahanData === 'string') {
+             pecahanData = JSON.parse(pecahanData);
+          }
+        } else {
+          pecahanData = rawPecahan || {};
+        }
+      } catch(e) {
+        pecahanData = {};
+      }
 
       const accountName = pecahanData.account || 'Kas Koperasi';
       
@@ -343,12 +353,10 @@
             )}
           </div>
 
-          {/* Desktop/Mobile FAB positioning */}
           <button onClick={() => setShowForm(true)} className="absolute bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-emerald-400 to-blue-600 rounded-full shadow-2xl flex items-center justify-center text-white z-20 btn-press hover:shadow-emerald-500/50 hover:shadow-2xl">
             <IconPlus />
           </button>
 
-          {/* Modal Form - Centered on Desktop */}
           {showForm && (
             <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center animate-fade-in p-0 md:p-4">
               <div className="bg-gradient-to-b from-slate-800 to-slate-900 w-full max-w-md rounded-t-3xl md:rounded-3xl p-6 animate-slide-up border border-slate-700/50 shadow-2xl">
@@ -762,7 +770,8 @@
       };
 
       const submitOpname = (dataOpname) => {
-        const opToSave = { ...dataOpname, pecahan: JSON.stringify({ ...dataOpname.pecahan, account: activeAccount }) };
+        // Objek tidak di-stringify di sini agar tidak dobel saat dikirim ke server
+        const opToSave = { ...dataOpname, pecahan: { ...dataOpname.pecahan, account: activeAccount } };
         setRawOpnames(prev => [...prev, opToSave]);
         setActiveTab('approval');
         fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'submitOpname', ...opToSave }) });
