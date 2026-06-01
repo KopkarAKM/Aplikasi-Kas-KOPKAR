@@ -647,18 +647,20 @@
 
       return (
         <div className="p-4 md:p-6 space-y-4 pb-28 md:pb-6 animate-fade-in">
-          <div className="flex gap-4 mb-6 relative">
-            <div className="flex-1 bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-600/30 rounded-xl p-4 animate-scale-in">
-              <p className="text-xs md:text-sm text-amber-200 font-semibold">⏳ Menunggu</p>
-              <p className="text-2xl md:text-3xl font-bold text-amber-400 mt-2">{pendingCount}</p>
-            </div>
-            <div className="flex-1 bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-600/30 rounded-xl p-4 animate-scale-in" style={{animationDelay: '0.1s'}}>
-              <p className="text-xs md:text-sm text-emerald-200 font-semibold">✓ Selesai</p>
-              <p className="text-2xl md:text-3xl font-bold text-emerald-400 mt-2">{doneCount}</p>
+          <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <div className="flex gap-4 flex-1">
+              <div className="flex-1 bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-600/30 rounded-xl p-4 animate-scale-in">
+                <p className="text-xs md:text-sm text-amber-200 font-semibold">⏳ Menunggu</p>
+                <p className="text-2xl md:text-3xl font-bold text-amber-400 mt-2">{pendingCount}</p>
+              </div>
+              <div className="flex-1 bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-600/30 rounded-xl p-4 animate-scale-in" style={{animationDelay: '0.1s'}}>
+                <p className="text-xs md:text-sm text-emerald-200 font-semibold">✓ Selesai</p>
+                <p className="text-2xl md:text-3xl font-bold text-emerald-400 mt-2">{doneCount}</p>
+              </div>
             </div>
             
-            <button onClick={() => downloadCSV(opnames, `Opname_${activeAccount}_${new Date().toISOString().split('T')[0]}.csv`, 'opname')} className="absolute -top-12 md:-top-14 right-0 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white hover:bg-blue-600 transition-colors btn-press flex items-center gap-2 text-sm font-semibold shadow-lg" title="Export Laporan Opname">
-                <IconDownload /> <span className="hidden md:inline">Export CSV</span>
+            <button onClick={() => downloadCSV(opnames, `Opname_${activeAccount}_${new Date().toISOString().split('T')[0]}.csv`, 'opname')} className="md:w-auto w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 md:py-2.5 text-white hover:bg-blue-600 transition-colors btn-press flex justify-center items-center gap-2 text-sm font-semibold shadow-lg" title="Export Laporan Opname">
+                <IconDownload /> <span>Export CSV</span>
             </button>
           </div>
 
