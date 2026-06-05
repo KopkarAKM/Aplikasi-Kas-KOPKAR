@@ -55,25 +55,26 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfP26-S4E0R4IsvKhx4CfFcHBvNFevVsTR0pwbuoey2IluMStp97MioxFawwdzxJueNw/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVpHG9TmbVGg07CTLokcniO4AmKhAJGtRDxSdPfFjdTBFlKqGLYd-qdgqZ6suAMSw/exec';
 
     // Ikons
     const IconHome = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>;
     const IconList = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>;
     const IconPlus = () => <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
-    const IconCheckFile = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><polyline points="9 15 11 17 15 13"></polyline></svg>;
+    const IconHistory = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>;
+    const IconCamera = () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>;
     const IconArrowDownLeft = () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="17" y1="7" x2="7" y2="17"></line><polyline points="17 17 7 17 7 7"></polyline></svg>;
     const IconArrowUpRight = () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>;
     const IconSearch = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
     const IconInbox = () => <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>;
-    const IconClock = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>;
-    const IconCheckCircle = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
+    const IconCheckCircle = () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
     const IconX = () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
     const IconOpname = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>;
     const IconPrint = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>;
     const IconBack = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>;
     const IconWallet = () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>;
     const IconDownload = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
+    const IconEye = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>;
 
     // Utility Format
     const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka || 0);
@@ -83,7 +84,7 @@
         if (isNaN(date.getTime())) return String(dateString);
         const today = new Date();
         if (date.toDateString() === today.toDateString()) return 'Hari ini';
-        return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     };
 
     const downloadCSV = (data, filename, type) => {
@@ -95,10 +96,10 @@
                 csvContent += `"${row.id}","${row.date}","${row.account}","${row.type}","${row.amount}","${descSafe}"\n`;
             });
         } else {
-            csvContent += "ID,Tanggal,Kas,Saldo Buku,Saldo Fisik,Selisih,Status,Dibuat Oleh,Diperiksa Oleh,Keterangan\n";
+            csvContent += "ID,Tanggal,Kas,Saldo Buku,Saldo Fisik,Selisih,Dibuat Oleh,Keterangan\n";
             data.forEach(row => {
                 const ketSafe = (row.keterangan || '').replace(/"/g, '""');
-                csvContent += `"${row.id}","${row.date}","${row.account}","${row.saldoBuku}","${row.saldoFisik}","${row.selisih}","${row.status}","${row.user}","${row.diperiksaOleh}","${ketSafe}"\n`;
+                csvContent += `"${row.id}","${row.date}","${row.account}","${row.saldoBuku}","${row.saldoFisik}","${row.selisih}","${row.user}","${ketSafe}"\n`;
             });
         }
         const encodedUri = encodeURI(csvContent);
@@ -151,10 +152,8 @@
       const saldoFisikKey = findKey(['fisik']);
       const selisihKey = findKey(['selisih']);
       const ketKey = findKey(['keterangan', 'ket']);
-      const statusKey = findKey(['status']);
       const userKey = findKey(['buat', 'user', 'kasir']);
-      const periksaKey = findKey(['periksa']);
-      const tahuKey = findKey(['tahu', 'setuju']);
+      const fotoKey = findKey(['foto', 'eviden', 'gambar']);
 
       let pecahanData = {};
       try {
@@ -187,10 +186,8 @@
         saldoFisik: Number(saldoFisikKey ? op[saldoFisikKey] : (op.saldoFisik || 0)),
         selisih: Number(selisihKey ? op[selisihKey] : (op.selisih || 0)),
         keterangan: rawKet,
-        status: statusKey ? op[statusKey] : (op.status || 'Menunggu Diperiksa'),
         user: userKey ? op[userKey] : (op.user || 'Kasir'),
-        diperiksaOleh: periksaKey ? op[periksaKey] : (op.diperiksaOleh || '-'),
-        diketahuiOleh: tahuKey ? op[tahuKey] : (op.diketahuiOleh || '-'),
+        foto: fotoKey ? op[fotoKey] : (op.foto || ''),
         pecahan: pecahanData,
         account: accountName
       };
@@ -555,6 +552,8 @@
       const [kertas, setKertas] = useState({'100000':'', '50000':'', '20000':'', '10000':'', '5000':'', '2000':'', '1000':''});
       const [logam, setLogam] = useState({'1000':'', '500':'', '200':'', '100':''});
       const [keteranganSelisih, setKeteranganSelisih] = useState('');
+      const [fotoEviden, setFotoEviden] = useState(null);
+      const [isCompressing, setIsCompressing] = useState(false);
 
       useEffect(() => {
         setSelectedAccount(activeAccount);
@@ -566,6 +565,40 @@
       const totalFisik = totalKertas + totalLogam;
       const selisih = totalFisik - saldoBuku;
 
+      const handleFotoChange = (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        setIsCompressing(true);
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 800;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > MAX_WIDTH) {
+                    height = height * (MAX_WIDTH / width);
+                    width = MAX_WIDTH;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Kompresi kualitas JPEG ke 70%
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                setFotoEviden(dataUrl);
+                setIsCompressing(false);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      };
+
       const handleKirim = () => {
         submitOpname({
           id: Date.now(), 
@@ -574,14 +607,15 @@
           saldoFisik: totalFisik, 
           selisih, 
           keterangan: keteranganSelisih, 
-          status: 'Menunggu Diperiksa', 
           user: 'Kasir', 
           account: selectedAccount,
+          foto: fotoEviden,
           pecahan: { kertas, logam }
         });
         setKertas({'100000':'', '50000':'', '20000':'', '10000':'', '5000':'', '2000':'', '1000':''});
         setLogam({'1000':'', '500':'', '200':'', '100':''});
         setKeteranganSelisih('');
+        setFotoEviden(null);
       };
 
       return (
@@ -632,60 +666,70 @@
             </div>
           </div>
 
+          <div className="bg-slate-800/80 rounded-xl p-5 shadow-lg border border-slate-700 mt-4">
+            <label className="text-sm font-semibold text-slate-300 block mb-3">Foto Bukti Fisik / Eviden</label>
+            {isCompressing ? (
+                <div className="w-full h-32 flex items-center justify-center border-2 border-slate-600 rounded-xl bg-slate-700/30">
+                    <span className="text-slate-400 text-sm animate-pulse">Memproses foto...</span>
+                </div>
+            ) : fotoEviden ? (
+                <div className="relative inline-block w-full text-center bg-slate-900 rounded-xl border border-slate-600 py-4">
+                    <img src={fotoEviden} className="h-40 mx-auto rounded shadow-lg object-contain" alt="Bukti Fisik" />
+                    <button onClick={() => setFotoEviden(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 rounded-full p-1.5 text-white shadow btn-press" title="Hapus Foto">
+                        <IconX />
+                    </button>
+                </div>
+            ) : (
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-500 rounded-xl cursor-pointer hover:bg-slate-700/50 transition-colors bg-slate-900/30">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <IconCamera />
+                        <p className="text-sm text-slate-400 mt-2 font-medium">Ambil Foto / Unggah Eviden</p>
+                    </div>
+                    <input type="file" accept="image/*" capture="environment" className="hidden" onChange={handleFotoChange} />
+                </label>
+            )}
+          </div>
+
           {selisih !== 0 && (
             <textarea className="w-full bg-slate-800 border border-red-500/50 focus:border-red-500 rounded-xl p-4 text-white outline-none placeholder-slate-500" rows="3" placeholder="Wajib ketik alasan selisih di sini..." value={keteranganSelisih} onChange={e => setKeteranganSelisih(e.target.value)} />
           )}
 
-          <button onClick={handleKirim} disabled={selisih !== 0 && !keteranganSelisih.trim()} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold py-3.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg btn-press text-base">Kirim Laporan Opname</button>
+          <button onClick={handleKirim} disabled={selisih !== 0 && !keteranganSelisih.trim()} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold py-3.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg btn-press text-base">Simpan Laporan Opname</button>
         </div>
       );
     };
 
-    const ApprovalView = ({ opnames, role, updateStatus, handlePrint, activeAccount }) => {
-      const pendingCount = opnames.filter(o => o.status === 'Menunggu Diperiksa' || o.status === 'Menunggu Disetujui').length;
-      const doneCount = opnames.filter(o => o.status === 'Selesai').length;
+    const RiwayatOpnameView = ({ opnames, handlePrint, activeAccount }) => {
+      const [photoModal, setPhotoModal] = useState(null);
 
       return (
-        <div className="p-4 md:p-6 space-y-4 pb-28 md:pb-6 animate-fade-in">
+        <div className="p-4 md:p-6 space-y-4 pb-28 md:pb-6 animate-fade-in relative">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="flex gap-4 flex-1">
-              <div className="flex-1 bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-600/30 rounded-xl p-4 animate-scale-in">
-                <p className="text-xs md:text-sm text-amber-200 font-semibold">⏳ Menunggu</p>
-                <p className="text-2xl md:text-3xl font-bold text-amber-400 mt-2">{pendingCount}</p>
-              </div>
-              <div className="flex-1 bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-600/30 rounded-xl p-4 animate-scale-in" style={{animationDelay: '0.1s'}}>
-                <p className="text-xs md:text-sm text-emerald-200 font-semibold">✓ Selesai</p>
-                <p className="text-2xl md:text-3xl font-bold text-emerald-400 mt-2">{doneCount}</p>
-              </div>
+            <div className="flex-1 bg-gradient-to-br from-emerald-500/20 to-teal-600/20 border border-emerald-600/30 rounded-xl p-4 animate-scale-in">
+              <p className="text-xs md:text-sm text-emerald-200 font-semibold">Total Riwayat Opname</p>
+              <p className="text-2xl md:text-3xl font-bold text-emerald-400 mt-2">{opnames.length}</p>
             </div>
             
-            <button onClick={() => downloadCSV(opnames, `Opname_${activeAccount}_${new Date().toISOString().split('T')[0]}.csv`, 'opname')} className="md:w-auto w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 md:py-2.5 text-white hover:bg-blue-600 transition-colors btn-press flex justify-center items-center gap-2 text-sm font-semibold shadow-lg" title="Export Laporan Opname">
+            <button onClick={() => downloadCSV(opnames, `Riwayat_Opname_${activeAccount}_${new Date().toISOString().split('T')[0]}.csv`, 'opname')} className="md:w-auto w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 md:py-2.5 text-white hover:bg-blue-600 transition-colors btn-press flex justify-center items-center gap-2 text-sm font-semibold shadow-lg" title="Export Laporan Opname">
                 <IconDownload /> <span>Export CSV</span>
             </button>
           </div>
 
-          {opnames.length === 0 && <div className="text-center py-10 text-slate-500 text-sm">Belum ada data Cash Opname.</div>}
+          {opnames.length === 0 && <div className="text-center py-10 text-slate-500 text-sm">Belum ada data Riwayat Opname.</div>}
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {opnames.map((op, i) => {
-              const isPending = op.status !== 'Selesai';
-              return (
-                <div key={op.id} className={`bg-gradient-to-r ${isPending ? 'from-amber-900/30 to-orange-900/20 border-amber-700/40' : 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40'} border rounded-xl p-5 shadow-lg card-hover transaction-enter flex flex-col`} style={{animationDelay: `${i * 0.1}s`}}>
+            {opnames.map((op, i) => (
+                <div key={op.id} className="bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg card-hover transaction-enter flex flex-col" style={{animationDelay: `${i * 0.1}s`}}>
                   <div className="flex justify-between items-start border-b border-slate-700/50 pb-4 mb-4">
                     <div className="flex items-start gap-4 flex-1">
-                      <div className={`w-12 h-12 rounded-full ${isPending ? 'bg-amber-500/20 border border-amber-500/40 text-amber-400' : 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400'} flex items-center justify-center`}>
-                        {isPending ? <IconClock /> : <IconCheckCircle />}
+                      <div className="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 flex items-center justify-center">
+                        <IconCheckCircle />
                       </div>
                       <div>
                           <p className="text-base font-semibold text-white">Opname Kas</p>
                           <p className="text-sm text-slate-400 mt-1">📅 {formatDate(op.date)}</p>
                       </div>
                     </div>
-                    <span className={`text-[10px] md:text-xs px-3 py-1.5 rounded-full font-bold uppercase ml-2 text-center ${
-                        op.status === 'Selesai' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
-                        op.status === 'Menunggu Disetujui' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
-                        'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                      }`}>{op.status}</span>
                   </div>
                   
                   <div className="bg-black/20 p-3 rounded-lg mb-4 text-center border border-white/5">
@@ -702,38 +746,38 @@
                     <span className={`text-right font-bold ${op.selisih < 0 ? 'text-red-400' : op.selisih > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>{formatRp(op.selisih)}</span>
                   </div>
 
-                  {op.selisih !== 0 && (
-                    <div className="bg-red-500/10 p-3 rounded-lg text-sm text-red-300 border border-red-500/30 mt-3">
+                  {op.keterangan && (
+                    <div className="bg-slate-800 p-3 rounded-lg text-sm text-slate-300 border border-slate-600 mt-3">
                         <strong>Ket:</strong> {op.keterangan}
                     </div>
                   )}
 
-                  <div className="bg-slate-900/50 p-4 rounded-xl text-sm space-y-3 mt-4 border border-slate-700/50">
-                    <div className="flex justify-between items-center text-slate-300">
-                      <span>Dibuat Oleh:</span><span className="font-bold text-white">{op.user}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-slate-300">
-                      <span>Diperiksa Oleh:</span><span className="font-bold text-white">{op.diperiksaOleh}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-slate-300">
-                      <span>Diketahui Oleh:</span><span className="font-bold text-white">{op.diketahuiOleh}</span>
-                    </div>
-                  </div>
+                  {op.foto && (
+                      <div className="mt-4 border border-slate-700 rounded-lg p-2 flex items-center justify-between bg-slate-900/50">
+                          <span className="text-xs font-semibold text-slate-400 px-2">Foto Eviden</span>
+                          <button onClick={() => setPhotoModal(op.foto)} className="flex items-center gap-1.5 bg-blue-600/20 text-blue-400 px-3 py-1.5 rounded-md text-xs font-bold hover:bg-blue-600/40 transition btn-press">
+                              <IconEye /> Lihat Foto
+                          </button>
+                      </div>
+                  )}
 
                   <button onClick={() => handlePrint(op)} className="w-full bg-slate-700 text-white border border-slate-600 py-3 rounded-xl font-bold text-sm mt-4 flex justify-center items-center gap-2 hover:bg-slate-600 transition-colors btn-press">
                     <IconPrint /> Cetak PDF Laporan
                   </button>
-
-                  {role === 'bendahara' && op.status === 'Menunggu Diperiksa' && (
-                    <button onClick={() => updateStatus(op.id, 'periksa')} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-xl font-bold text-sm mt-3 shadow-lg btn-press">Tandai Diperiksa</button>
-                  )}
-                  {role === 'manager' && op.status === 'Menunggu Disetujui' && (
-                    <button onClick={() => updateStatus(op.id, 'setujui')} className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-xl font-bold text-sm mt-3 shadow-lg btn-press">Setujui Opname</button>
-                  )}
                 </div>
-              );
-            })}
+            ))}
           </div>
+
+          {photoModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+                  <div className="relative w-full max-w-2xl">
+                      <button onClick={() => setPhotoModal(null)} className="absolute -top-10 right-0 text-white hover:text-slate-300 btn-press">
+                          <IconX />
+                      </button>
+                      <img src={photoModal} alt="Eviden" className="w-full h-auto rounded-xl shadow-2xl" />
+                  </div>
+              </div>
+          )}
         </div>
       );
     };
@@ -865,7 +909,7 @@
               </tbody>
             </table>
 
-            <h3 className="font-bold underline mb-4">TANDA TANGAN</h3>
+            <h3 className="font-bold underline mb-4">TANDA TANGAN PENGESAHAN</h3>
             <table className="w-full text-center mt-4">
               <tbody>
                 <tr>
@@ -880,6 +924,15 @@
                 </tr>
               </tbody>
             </table>
+
+            {op.foto && (
+                <div className="mt-12 break-inside-avoid">
+                    <h3 className="font-bold underline mb-4">LAMPIRAN BUKTI FISIK</h3>
+                    <div className="border border-black p-2 inline-block">
+                        <img src={op.foto} alt="Eviden" className="max-w-full max-h-[400px] object-contain" />
+                    </div>
+                </div>
+            )}
           </div>
         </div>
       );
@@ -887,7 +940,6 @@
 
     function App() {
       const [activeTab, setActiveTab] = useState('dashboard');
-      const [role, setRole] = useState('kasir');
       const [activeAccount, setActiveAccount] = useState('Kas Koperasi');
       const [rawTransactions, setRawTransactions] = useState([]);
       const [rawOpnames, setRawOpnames] = useState([]);
@@ -983,7 +1035,6 @@
       if(availableYears.length === 0) availableYears.push(new Date().getFullYear());
 
       const submitTransaksi = (newTx) => {
-        // Gunakan akun dari object form, bukan activeAccount
         const targetAccount = newTx.account || activeAccount;
         const txToSave = { ...newTx, desc: `[${targetAccount}] ${newTx.desc}`, account: targetAccount };
         setRawTransactions(prev => [...prev, txToSave]);
@@ -1001,20 +1052,8 @@
             account: targetAccount 
         };
         setRawOpnames(prev => [...prev, opToSave]);
-        setActiveTab('approval');
+        setActiveTab('riwayat');
         fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'submitOpname', ...opToSave }) });
-      };
-
-      const updateStatus = (id, actionRole) => {
-        let approverName = role === 'bendahara' ? 'Bendahara' : 'Manager';
-        setRawOpnames(prev => prev.map(op => {
-          if (op.id === id || op.ID === id) {
-            if (actionRole === 'periksa') return { ...op, status: 'Menunggu Disetujui', diperiksaOleh: approverName, 'Diperiksa Oleh': approverName };
-            if (actionRole === 'setujui') return { ...op, status: 'Selesai', diketahuiOleh: approverName, 'Diketahui Oleh': approverName };
-          }
-          return op;
-        }));
-        fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', id: id, role: role, approver: approverName }) });
       };
 
       if (printData) {
@@ -1029,14 +1068,7 @@
               <div className="p-6 pb-2">
                 <h1 className="text-2xl font-bold text-white tracking-tight">KasKecil Pro</h1>
               </div>
-              <div className="px-6 py-4">
-                 <select value={role} onChange={e => setRole(e.target.value)} className="w-full bg-slate-800 text-blue-50 border border-slate-700 px-3 py-2 rounded-lg text-sm font-medium outline-none cursor-pointer">
-                    <option value="kasir">👤 Kasir</option>
-                    <option value="bendahara">💰 Bendahara</option>
-                    <option value="manager">👑 Manager</option>
-                 </select>
-              </div>
-              <nav className="flex-1 px-4 space-y-3 mt-4">
+              <nav className="flex-1 px-4 space-y-3 mt-6">
                 <button onClick={() => setActiveTab('dashboard')} className={`flex items-center gap-3 w-full p-3 rounded-xl transition-all btn-press ${activeTab === 'dashboard' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
                   <IconHome /> <span className="font-semibold text-sm">Dashboard</span>
                 </button>
@@ -1044,11 +1076,10 @@
                   <IconList /> <span className="font-semibold text-sm">Transaksi</span>
                 </button>
                 <button onClick={() => setActiveTab('opname')} className={`flex items-center gap-3 w-full p-3 rounded-xl transition-all btn-press ${activeTab === 'opname' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
-                  <IconOpname /> <span className="font-semibold text-sm">Opname Kas</span>
+                  <IconOpname /> <span className="font-semibold text-sm">Buat Opname</span>
                 </button>
-                <button onClick={() => setActiveTab('approval')} className={`flex items-center justify-between w-full p-3 rounded-xl transition-all btn-press ${activeTab === 'approval' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
-                  <div className="flex items-center gap-3"><IconCheckFile /> <span className="font-semibold text-sm">Persetujuan</span></div>
-                  {opnames.filter(o => o.status !== 'Selesai').length > 0 && <span className="w-2 h-2 bg-amber-500 rounded-full"></span>}
+                <button onClick={() => setActiveTab('riwayat')} className={`flex items-center justify-between w-full p-3 rounded-xl transition-all btn-press ${activeTab === 'riwayat' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
+                  <div className="flex items-center gap-3"><IconHistory /> <span className="font-semibold text-sm">Riwayat Opname</span></div>
                 </button>
               </nav>
             </aside>
@@ -1058,14 +1089,9 @@
                 <div className="flex items-center justify-between md:hidden">
                   <div>
                     <h1 className="text-2xl font-bold text-white tracking-tight">KasKecil Pro</h1>
-                    <select value={role} onChange={e => setRole(e.target.value)} className="bg-white/20 text-blue-50 border border-white/30 px-2 py-1 mt-1.5 rounded-md text-xs font-medium outline-none backdrop-blur cursor-pointer appearance-none">
-                        <option value="kasir" className="text-slate-800">👤 Kasir</option>
-                        <option value="bendahara" className="text-slate-800">💰 Bendahara</option>
-                        <option value="manager" className="text-slate-800">👑 Manager</option>
-                    </select>
                   </div>
-                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white font-bold text-xl border border-white/30 shadow-lg uppercase">
-                    {role.charAt(0)}
+                  <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white font-bold text-lg border border-white/30 shadow-lg">
+                    K
                   </div>
                 </div>
 
@@ -1111,10 +1137,8 @@
                   accounts={accounts} 
                   activeAccount={activeAccount} 
                 />}
-                {activeTab === 'approval' && <ApprovalView 
+                {activeTab === 'riwayat' && <RiwayatOpnameView 
                   opnames={opnames} 
-                  role={role} 
-                  updateStatus={updateStatus} 
                   handlePrint={setPrintData} 
                   activeAccount={activeAccount}
                 />}
@@ -1130,10 +1154,9 @@
                 <button onClick={() => setActiveTab('opname')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='opname'?'tab-active':'tab-inactive'}`}>
                   <IconOpname /><span className="text-[10px] font-semibold">Opname</span>
                 </button>
-                <button onClick={() => setActiveTab('approval')} className={`flex flex-col items-center gap-1.5 tab-button btn-press relative ${activeTab==='approval'?'tab-active':'tab-inactive'}`}>
-                    <IconCheckFile />
-                    {opnames.filter(o => o.status !== 'Selesai').length > 0 && <span className="absolute top-0 right-2.5 w-2 h-2 bg-amber-500 rounded-full border border-slate-800"></span>}
-                    <span className="text-[10px] font-semibold">Persetujuan</span>
+                <button onClick={() => setActiveTab('riwayat')} className={`flex flex-col items-center gap-1.5 tab-button btn-press relative ${activeTab==='riwayat'?'tab-active':'tab-inactive'}`}>
+                    <IconHistory />
+                    <span className="text-[10px] font-semibold">Riwayat</span>
                 </button>
               </nav>
             </div>
