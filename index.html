@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>KasKecil Pro</title>
+  <title>KasKecil Pro - KOPKAR AKM</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -23,18 +23,20 @@
     .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
     .animate-scale-in { animation: scaleIn 0.3s ease-out forwards; }
     
-    .tab-active { @apply text-blue-400; }
-    .tab-inactive { @apply text-slate-500 hover:text-slate-400; }
-    .tab-button { @apply transition-all duration-300; }
+    .tab-active { color: #60a5fa; }
+    .tab-inactive { color: #64748b; }
+    .tab-inactive:hover { color: #94a3b8; }
+    .tab-button { transition: all 0.3s ease; }
     
-    .card-hover { @apply transition-all duration-300 hover:shadow-lg hover:scale-[1.02]; }
-    .btn-press { @apply active:scale-95 transition-transform duration-150; }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: scale(1.01); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+    .btn-press:active { transform: scale(0.96); }
     
-    .input-focus { @apply focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 outline-none; }
+    .input-focus:focus { ring: 2px; border-color: transparent; outline: none; }
     .transaction-enter { animation: slideUp 0.4s ease-out forwards; opacity: 0; }
-    .dot { @apply w-2 h-2 rounded-full; }
+    .dot { width: 8px; height: 8px; border-radius: 9999px; }
     
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     
@@ -57,16 +59,14 @@
 
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVpHG9TmbVGg07CTLokcniO4AmKhAJGtRDxSdPfFjdTBFlKqGLYd-qdgqZ6suAMSw/exec';
 
-    // =========================================================================
-    // PIN OTORISASI INTERNAL KOPKAR AKM
-    // =========================================================================
+    // PIN Otorisasi Kopkar AKM
     const PIN_KEPALA_UNIT = '4155';
     const PIN_PENGURUS    = '9876';
 
-    // Ikons
+    // Ikons SVG
     const IconHome = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>;
     const IconList = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>;
-    const IconPlus = () => <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
+    const IconPlus = () => <svg width="30" height="30" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
     const IconHistory = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>;
     const IconCamera = () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>;
     const IconArrowDownLeft = () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="17" y1="7" x2="7" y2="17"></line><polyline points="17 17 7 17 7 7"></polyline></svg>;
@@ -74,7 +74,7 @@
     const IconSearch = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
     const IconInbox = () => <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>;
     const IconCheckCircle = () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
-    const IconX = () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
+    const IconX = () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>;
     const IconOpname = () => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>;
     const IconPrint = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>;
     const IconBack = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>;
@@ -82,7 +82,7 @@
     const IconDownload = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
     const IconEye = () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>;
 
-    // Utility Format
+    // Utility Format Rupiah & Tanggal
     const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka || 0);
     const formatDate = (dateString) => {
         if (!dateString) return '-';
@@ -132,8 +132,8 @@
 
       const match = rawDesc.match(/^\[(.*?)\]\s*(.*)$/);
       if (match) {
-          accountName = match;
-          rawDesc = match;
+          accountName = match[1];
+          rawDesc = match[2];
       } else if (t.account) {
           accountName = t.account;
       }
@@ -181,8 +181,8 @@
       
       const match = rawKet.match(/^\[(.*?)\]\s*(.*)$/);
       if (match) {
-          accountName = match;
-          rawKet = match;
+          accountName = match[1];
+          rawKet = match[2];
       }
       
       return {
@@ -199,6 +199,9 @@
       };
     };
 
+    // =========================================================================
+    // 1. DASHBOARD VIEW
+    // =========================================================================
     const Dashboard = ({ 
       saldoAwal, saldoAkhir, totalPemasukan, totalPengeluaran, transactions, 
       setActiveTab, allTransactions, accounts, grandTotal,
@@ -206,7 +209,7 @@
     }) => {
       const [detailModal, setDetailModal] = useState(null);
       const recent = transactions.slice(0, 5);
-      const statusColor = saldoAkhir >= 0 ? 'from-emerald-500 to-teal-600' : 'from-red-500 to-orange-600';
+      const statusColor = saldoAkhir >= 0 ? 'from-emerald-600 to-teal-700' : 'from-red-600 to-orange-700';
       const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
       const summaryData = accounts.map(acc => {
@@ -224,20 +227,23 @@
 
       return (
         <div className="p-4 md:p-6 space-y-6 animate-fade-in pb-28 md:pb-6 relative">
-          <div className="bg-slate-800/80 rounded-xl p-4 md:p-5 shadow-lg border border-slate-700/50 flex justify-between items-center animate-slide-down">
+          <div className="bg-slate-800/80 rounded-2xl p-4 md:p-5 shadow-lg border border-slate-700/50 flex justify-between items-center animate-slide-down">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
+              <div className="p-2.5 bg-blue-500/20 text-blue-400 rounded-xl">
                 <IconWallet />
               </div>
-              <span className="text-sm md:text-base font-bold text-slate-200">Total Keseluruhan (Semua Kas)</span>
+              <div>
+                <span className="text-xs text-slate-400 block font-medium">Konsolidasi Kas</span>
+                <span className="text-sm md:text-base font-bold text-slate-200">Total Keseluruhan (Semua Kas)</span>
+              </div>
             </div>
-            <span className="text-lg md:text-xl font-bold text-white">{formatRp(grandTotal)}</span>
+            <span className="text-lg md:text-2xl font-bold text-white">{formatRp(grandTotal)}</span>
           </div>
 
           <div className="flex justify-between items-center bg-slate-800/50 p-3 rounded-xl border border-slate-700/50 animate-slide-down" style={{animationDelay: '0.05s'}}>
-             <h2 className="text-sm md:text-base font-bold text-white hidden md:block">Ringkasan Tutup Buku</h2>
+             <h2 className="text-sm md:text-base font-bold text-white hidden md:block">Ringkasan Periode Pembukuan</h2>
              <div className="flex gap-2 w-full md:w-auto">
-               <select value={dashboardMonth} onChange={e=>setDashboardMonth(Number(e.target.value))} className="flex-1 md:w-32 bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm outline-none cursor-pointer">
+               <select value={dashboardMonth} onChange={e=>setDashboardMonth(Number(e.target.value))} className="flex-1 md:w-36 bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm outline-none cursor-pointer">
                  {monthNames.map((m, i) => <option key={i} value={i}>{m}</option>)}
                </select>
                <select value={dashboardYear} onChange={e=>setDashboardYear(Number(e.target.value))} className="w-24 md:w-28 bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm outline-none cursor-pointer">
@@ -251,8 +257,8 @@
               <div>
                 <p className="text-sm md:text-base opacity-90 font-medium">💰 Saldo Akhir Bulan</p>
                 <p className="text-3xl md:text-4xl font-bold mt-2 tracking-tight">{formatRp(saldoAkhir)}</p>
-                <div className="inline-block bg-black/20 rounded-md px-2 py-1 mt-3">
-                  <p className="text-xs font-semibold opacity-90">Saldo Awal: {formatRp(saldoAwal)}</p>
+                <div className="inline-block bg-black/25 rounded-lg px-3 py-1 mt-3 backdrop-blur-sm">
+                  <p className="text-xs font-semibold opacity-95">Saldo Awal Periode: {formatRp(saldoAwal)}</p>
                 </div>
               </div>
               <div className="text-5xl md:text-7xl opacity-20">{saldoAkhir >= 0 ? '📈' : '📉'}</div>
@@ -260,43 +266,43 @@
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-500/30 rounded-xl p-5 shadow-lg card-hover animate-scale-in" style={{animationDelay: '0.15s'}}>
+            <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 rounded-2xl p-5 shadow-lg card-hover animate-scale-in" style={{animationDelay: '0.15s'}}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs md:text-sm text-emerald-200 uppercase font-semibold tracking-wide">Masuk Bln Ini</p>
+                  <p className="text-xs md:text-sm text-emerald-300 uppercase font-semibold tracking-wide">Masuk Bulan Ini</p>
                   <p className="text-lg md:text-xl font-bold text-emerald-400 mt-2">{formatRp(totalPemasukan)}</p>
                 </div>
-                <div className="text-emerald-400 opacity-30"><IconArrowDownLeft /></div>
+                <div className="text-emerald-400 opacity-40"><IconArrowDownLeft /></div>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-red-500/20 to-red-600/20 border border-red-500/30 rounded-xl p-5 shadow-lg card-hover animate-scale-in" style={{animationDelay: '0.2s'}}>
+            <div className="bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30 rounded-2xl p-5 shadow-lg card-hover animate-scale-in" style={{animationDelay: '0.2s'}}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs md:text-sm text-red-200 uppercase font-semibold tracking-wide">Keluar Bln Ini</p>
+                  <p className="text-xs md:text-sm text-red-300 uppercase font-semibold tracking-wide">Keluar Bulan Ini</p>
                   <p className="text-lg md:text-xl font-bold text-red-400 mt-2">{formatRp(totalPengeluaran)}</p>
                 </div>
-                <div className="text-red-400 opacity-30"><IconArrowUpRight /></div>
+                <div className="text-red-400 opacity-40"><IconArrowUpRight /></div>
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-800/80 rounded-xl p-5 shadow-lg border border-slate-700/50 mt-6 animate-scale-in" style={{animationDelay: '0.25s'}}>
+          <div className="bg-slate-800/80 rounded-2xl p-5 shadow-lg border border-slate-700/50 mt-6 animate-scale-in" style={{animationDelay: '0.25s'}}>
             <h3 className="text-sm md:text-base font-bold text-white mb-6">Perbandingan Kas ({monthNames[dashboardMonth]} {dashboardYear})</h3>
             <div className="flex h-40 md:h-48 items-end justify-around gap-2 px-2">
               {summaryData.map(s => (
                 <div key={s.acc} className="flex flex-col items-center flex-1">
-                  <div className="flex items-end gap-1 md:gap-2 w-full h-32 md:h-40 justify-center">
+                  <div className="flex items-end gap-1.5 md:gap-2 w-full h-32 md:h-40 justify-center">
                     <div 
                       onClick={() => setDetailModal({acc: s.acc, type: 'masuk', txs: s.txs.filter(t=>t.type==='masuk')})}
                       className="w-5 md:w-8 bg-emerald-500 rounded-t-md cursor-pointer hover:bg-emerald-400 transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]" 
-                      style={{height: `${(s.masuk / maxVal) * 100}%`, minHeight: '4px'}}
-                      title={`Pemasukan ${s.acc}: ${formatRp(s.masuk)}`}
+                      style={{height: `${(s.masuk / maxVal) * 100}%`, minHeight: '6px'}}
+                      title={`Pemasukan ${s.acc}: ${formatRp(s.masuk)} (Klik untuk rincian)`}
                     ></div>
                     <div 
                       onClick={() => setDetailModal({acc: s.acc, type: 'keluar', txs: s.txs.filter(t=>t.type==='keluar')})}
                       className="w-5 md:w-8 bg-red-500 rounded-t-md cursor-pointer hover:bg-red-400 transition-all shadow-[0_0_10px_rgba(239,68,68,0.3)]" 
-                      style={{height: `${(s.keluar / maxVal) * 100}%`, minHeight: '4px'}}
-                      title={`Pengeluaran ${s.acc}: ${formatRp(s.keluar)}`}
+                      style={{height: `${(s.keluar / maxVal) * 100}%`, minHeight: '6px'}}
+                      title={`Pengeluaran ${s.acc}: ${formatRp(s.keluar)} (Klik untuk rincian)`}
                     ></div>
                   </div>
                   <p className="text-[10px] md:text-xs text-slate-400 mt-3 text-center leading-tight truncate w-full font-medium" title={s.acc}>{s.acc.replace('Kas ', '')}</p>
@@ -312,25 +318,25 @@
           <div className="animate-fade-in mt-6" style={{animationDelay: '0.3s'}}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm md:text-base font-bold text-white flex items-center gap-2">
-                <span className="dot bg-blue-400"></span> Transaksi Bulan Ini
+                <span className="dot bg-blue-400"></span> Transaksi Terkini Bulan Ini
               </h3>
               <button onClick={() => setActiveTab('transaksi')} className="text-xs md:text-sm text-blue-400 hover:text-blue-300 font-semibold cursor-pointer btn-press">Ke Menu Transaksi →</button>
             </div>
             
             {recent.length === 0 ? (
-              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 text-center">
+              <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-8 text-center">
                 <div className="flex justify-center text-slate-600 mb-3"><IconInbox /></div>
-                <p className="text-sm text-slate-400">Belum ada transaksi bulan ini</p>
+                <p className="text-sm text-slate-400">Belum ada transaksi di bulan ini</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {recent.map((t, index) => {
                   const isIn = t.type === 'masuk';
                   return (
-                    <div key={t.id} className={`bg-gradient-to-r ${isIn ? 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40' : 'from-red-900/30 to-orange-900/20 border-red-700/40'} border rounded-xl p-4 shadow-lg card-hover transaction-enter`} style={{animationDelay: `${index * 0.08}s`}}>
+                    <div key={t.id} className={`bg-gradient-to-r ${isIn ? 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40' : 'from-red-900/30 to-orange-900/20 border-red-700/40'} border rounded-2xl p-4 shadow-lg card-hover transaction-enter`} style={{animationDelay: `${index * 0.08}s`}}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${isIn ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-red-500 to-orange-600'} flex items-center justify-center shadow-lg text-white`}>
+                          <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${isIn ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-red-500 to-orange-600'} flex items-center justify-center shadow-lg text-white flex-shrink-0`}>
                             {isIn ? <IconArrowDownLeft /> : <IconArrowUpRight />}
                           </div>
                           <div>
@@ -353,19 +359,19 @@
           </div>
 
           {detailModal && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center animate-fade-in p-4">
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center animate-fade-in p-4">
               <div className="bg-slate-900 w-full max-w-md rounded-2xl p-6 border border-slate-700 shadow-2xl flex flex-col max-h-[80vh]">
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="font-bold text-lg text-white">Detail {detailModal.type === 'masuk' ? 'Pemasukan' : 'Pengeluaran'}</h2>
-                  <button onClick={() => setDetailModal(null)} className="text-slate-400 hover:text-white btn-press"><IconX /></button>
+                  <button onClick={() => setDetailModal(null)} className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 btn-press"><IconX /></button>
                 </div>
                 <p className="text-sm font-semibold text-blue-400 mb-4">{detailModal.acc} - {monthNames[dashboardMonth]} {dashboardYear}</p>
                 <div className="overflow-y-auto space-y-3 flex-1 pr-1 hide-scrollbar">
                   {detailModal.txs.length === 0 ? (
-                    <p className="text-sm text-slate-500 text-center py-8">Tidak ada transaksi</p>
+                    <p className="text-sm text-slate-500 text-center py-8">Tidak ada rincian data</p>
                   ) : (
                     detailModal.txs.map(t => (
-                      <div key={t.id} className="bg-slate-800/80 p-3 rounded-lg flex justify-between items-center border border-slate-700">
+                      <div key={t.id} className="bg-slate-800/80 p-3.5 rounded-xl flex justify-between items-center border border-slate-700">
                         <div>
                           <p className="text-sm font-medium text-white max-w-[200px]">{t.desc}</p>
                           <p className="text-xs text-slate-400 mt-1">{formatDate(t.date)}</p>
@@ -382,7 +388,10 @@
       );
     };
 
-    const TransaksiView = ({ transactions, submitTransaksi, accounts, activeAccount }) => {
+    // =========================================================================
+    // 2. TRANSAKSI VIEW
+    // =========================================================================
+    const TransaksiView = ({ transactions, submitTransaksi, accounts, activeAccount, isSubmitting }) => {
       const [searchQuery, setSearchQuery] = useState('');
       const [filterType, setFilterType] = useState('month');
       const [filterDate, setFilterDate] = useState('');
@@ -422,13 +431,18 @@
 
       const handleAdd = (e) => {
         e.preventDefault();
-        // Verifikasi PIN Kepala Unit (4155) atau PIN Pengurus (9876)
+        // Verifikasi PIN Otorisasi (4155 atau 9876)
         if (pin !== PIN_KEPALA_UNIT && pin !== PIN_PENGURUS) {
-          setPinError('PIN Akses salah! Otorisasi ditolak.');
+          setPinError('PIN Akses salah! (Gunakan 4155 atau 9876)');
           return;
         }
         setPinError('');
-        submitTransaksi({ id: Date.now(), ...formData, amount: Number(formData.amount), pin_otorisasi: pin });
+        submitTransaksi({ 
+          id: Date.now(), 
+          ...formData, 
+          amount: Number(formData.amount), 
+          pin_otorisasi: pin 
+        });
         setShowForm(false);
         setFormData({ date: new Date().toISOString().split('T')[0], type: 'keluar', amount: '', desc: '', account: activeAccount });
         setPin('');
@@ -438,8 +452,8 @@
         <div className="p-4 md:p-6 space-y-4 pb-28 md:pb-6 h-full flex flex-col relative">
           <div className="flex gap-2 animate-slide-down z-10 relative">
             <div className="relative flex-1">
-              <div className="absolute left-3 top-3 text-slate-500"><IconSearch /></div>
-              <input type="text" placeholder="🔍 Cari transaksi..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white text-sm md:text-base placeholder-slate-500 input-focus" />
+              <div className="absolute left-3.5 top-3.5 text-slate-500"><IconSearch /></div>
+              <input type="text" placeholder="Cari keterangan transaksi..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white text-sm md:text-base placeholder-slate-500 input-focus" />
             </div>
             <div className="relative min-w-[110px] md:min-w-[150px] flex gap-2">
               <select value={filterType} onChange={e => setFilterType(e.target.value)} className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-2 py-2.5 text-white text-sm md:text-base input-focus appearance-none cursor-pointer outline-none">
@@ -464,19 +478,19 @@
 
           <div className="space-y-3 flex-1 overflow-y-auto pr-1">
             {filtered.length === 0 ? (
-              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-8 text-center mt-8">
+              <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-8 text-center mt-8">
                 <div className="flex justify-center text-slate-600 mb-3"><IconSearch /></div>
-                <p className="text-sm text-slate-400">Tidak ada transaksi ditemukan</p>
+                <p className="text-sm text-slate-400">Tidak ada transaksi yang cocok</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-3">
                 {filtered.map((t, index) => {
                   const isIn = t.type === 'masuk';
                   return (
-                    <div key={t.id} className={`bg-gradient-to-r ${isIn ? 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40' : 'from-red-900/30 to-orange-900/20 border-red-700/40'} border rounded-xl p-4 shadow-lg card-hover transaction-enter`} style={{animationDelay: `${index * 0.05}s`}}>
+                    <div key={t.id} className={`bg-gradient-to-r ${isIn ? 'from-emerald-900/30 to-teal-900/20 border-emerald-700/40' : 'from-red-900/30 to-orange-900/20 border-red-700/40'} border rounded-2xl p-4 shadow-lg card-hover transaction-enter`} style={{animationDelay: `${index * 0.05}s`}}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${isIn ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-red-500 to-orange-600'} flex items-center justify-center shadow-lg text-white`}>
+                          <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${isIn ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-red-500 to-orange-600'} flex items-center justify-center shadow-lg text-white flex-shrink-0`}>
                             {isIn ? <IconArrowDownLeft /> : <IconArrowUpRight />}
                           </div>
                           <div>
@@ -487,7 +501,7 @@
                             </div>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right whitespace-nowrap">
                           <p className={`text-sm md:text-base font-bold ${isIn ? 'text-emerald-400' : 'text-red-400'}`}>{isIn ? '+' : '-'}{formatRp(t.amount)}</p>
                         </div>
                       </div>
@@ -498,16 +512,16 @@
             )}
           </div>
 
-          <button onClick={handleAddClick} className="absolute bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-emerald-400 to-blue-600 rounded-full shadow-2xl flex items-center justify-center text-white z-20 btn-press hover:shadow-emerald-500/50 hover:shadow-2xl">
+          <button onClick={handleAddClick} className="absolute bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-full shadow-2xl flex items-center justify-center text-white z-20 btn-press hover:shadow-emerald-500/40 hover:scale-105 transition-all">
             <IconPlus />
           </button>
 
           {showForm && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center animate-fade-in p-0 md:p-4">
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end md:items-center justify-center animate-fade-in p-0 md:p-4">
               <div className="bg-gradient-to-b from-slate-800 to-slate-900 w-full max-w-md rounded-t-3xl md:rounded-3xl p-6 animate-slide-up border border-slate-700/50 shadow-2xl max-h-[90vh] overflow-y-auto">
                 <div className="flex items-center justify-between mb-5">
                   <h2 className="font-bold text-xl text-white">Tambah Transaksi Kas</h2>
-                  <button onClick={() => { setShowForm(false); setPin(''); setPinError(''); }} className="text-slate-400 hover:text-white transition btn-press"><IconX /></button>
+                  <button onClick={() => { setShowForm(false); setPin(''); setPinError(''); }} className="text-slate-400 hover:text-white transition p-1.5 rounded-lg hover:bg-slate-700 btn-press"><IconX /></button>
                 </div>
                 <form onSubmit={handleAdd} className="space-y-4">
                   <div>
@@ -520,31 +534,37 @@
                   </div>
                   <div>
                     <label className="text-sm font-semibold text-slate-300 mb-2 block">Tanggal</label>
-                    <input type="date" required className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm input-focus placeholder-slate-400" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} style={{ colorScheme: 'dark' }} />
+                    <input type="date" required className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm input-focus" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} style={{ colorScheme: 'dark' }} />
                   </div>
                   <div>
                     <label className="text-sm font-semibold text-slate-300 mb-2 block">Jenis Transaksi</label>
                     <div className="flex gap-2">
-                      <button type="button" className={`flex-1 py-3 rounded-xl border font-semibold text-sm transition-all btn-press ${formData.type === 'keluar' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600'}`} onClick={() => setFormData({...formData, type: 'keluar'})}>💸 Keluar</button>
-                      <button type="button" className={`flex-1 py-3 rounded-xl border font-semibold text-sm transition-all btn-press ${formData.type === 'masuk' ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600'}`} onClick={() => setFormData({...formData, type: 'masuk'})}>💰 Masuk</button>
+                      <button type="button" className={`flex-1 py-3 rounded-xl border font-semibold text-sm transition-all btn-press ${formData.type === 'keluar' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600'}`} onClick={() => setFormData({...formData, type: 'keluar'})}>💸 Pengeluaran</button>
+                      <button type="button" className={`flex-1 py-3 rounded-xl border font-semibold text-sm transition-all btn-press ${formData.type === 'masuk' ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' : 'bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600'}`} onClick={() => setFormData({...formData, type: 'masuk'})}>💰 Pemasukan</button>
                     </div>
                   </div>
                   <div>
                     <label className="text-sm font-semibold text-slate-300 mb-2 block">Nominal (Rp)</label>
-                    <input type="number" required placeholder="0" className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm input-focus placeholder-slate-400" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} />
+                    <input type="number" required placeholder="0" min="1" className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm input-focus placeholder-slate-400" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} />
                   </div>
                   <div>
                     <label className="text-sm font-semibold text-slate-300 mb-2 block">Keterangan</label>
-                    <input type="text" required placeholder="Misal: Beli ATK..." className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm input-focus placeholder-slate-400" value={formData.desc} onChange={e => setFormData({...formData, desc: e.target.value})} />
+                    <input type="text" required placeholder="Misal: Pembelian ATK Kantor..." className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm input-focus placeholder-slate-400" value={formData.desc} onChange={e => setFormData({...formData, desc: e.target.value})} />
                   </div>
                   <div>
                     <label className="text-sm font-semibold text-slate-300 mb-2 block">PIN Otorisasi (Pengurus / Kepala Unit)</label>
                     <input type="password" required placeholder="****" maxLength="4" className={`w-full bg-slate-700 border rounded-xl px-4 py-3 text-white text-sm input-focus tracking-[0.5em] ${pinError ? 'border-red-500' : 'border-slate-600'}`} value={pin} onChange={e => { setPin(e.target.value); setPinError(''); }} />
-                    {pinError && <p className="text-red-400 text-xs mt-2 font-medium">{pinError}</p>}
+                    {pinError ? (
+                      <p className="text-red-400 text-xs mt-2 font-medium">{pinError}</p>
+                    ) : (
+                      <p className="text-slate-400 text-[11px] mt-1">Gunakan PIN Otorisasi resmi (4155 / 9876)</p>
+                    )}
                   </div>
                   <div className="flex gap-3 mt-6 pt-2">
                     <button type="button" onClick={() => { setShowForm(false); setPin(''); setPinError(''); }} className="flex-1 py-3 rounded-xl border border-slate-600 text-white text-sm font-semibold hover:bg-slate-700 transition-all btn-press">Batal</button>
-                    <button type="submit" className="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-blue-600 text-white text-sm font-bold hover:shadow-lg transition-all btn-press">Simpan</button>
+                    <button type="submit" disabled={isSubmitting} className="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-blue-600 text-white text-sm font-bold hover:shadow-lg transition-all btn-press disabled:opacity-50">
+                      {isSubmitting ? 'Menyimpan...' : 'Simpan'}
+                    </button>
                   </div>
                 </form>
               </div>
@@ -554,7 +574,10 @@
       );
     };
 
-    const CashOpnameView = ({ saldoBukuAll, submitOpname, accounts, activeAccount }) => {
+    // =========================================================================
+    // 3. CASH OPNAME VIEW
+    // =========================================================================
+    const CashOpnameView = ({ saldoBukuAll, submitOpname, accounts, activeAccount, isSubmitting }) => {
       const [selectedAccount, setSelectedAccount] = useState(activeAccount);
       const [kertas, setKertas] = useState({'100000':'', '50000':'', '20000':'', '10000':'', '5000':'', '2000':'', '1000':''});
       const [logam, setLogam] = useState({'1000':'', '500':'', '200':'', '100':''});
@@ -584,6 +607,7 @@
             const img = new Image();
             img.onload = () => {
                 const canvas = document.createElement('canvas');
+                // Mengompres foto maksimal lebar 800px untuk menghemat bandwidth
                 const MAX_WIDTH = 800;
                 let width = img.width;
                 let height = img.height;
@@ -608,9 +632,9 @@
       };
 
       const handleKirim = () => {
-        // Validasi PIN Otorisasi sebelum simpan laporan opname brankas
+        // Validasi PIN Otorisasi sebelum simpan laporan opname
         if (pinOpname !== PIN_KEPALA_UNIT && pinOpname !== PIN_PENGURUS) {
-          setPinOpnameError('PIN Otorisasi salah! Laporan opname ditolak.');
+          setPinOpnameError('PIN Otorisasi salah! (Gunakan 4155 atau 9876)');
           return;
         }
         setPinOpnameError('');
@@ -628,6 +652,8 @@
           pecahan: { kertas, logam },
           pin_otorisasi: pinOpname
         });
+
+        // Reset form
         setKertas({'100000':'', '50000':'', '20000':'', '10000':'', '5000':'', '2000':'', '1000':''});
         setLogam({'1000':'', '500':'', '200':'', '100':''});
         setKeteranganSelisih('');
@@ -637,7 +663,7 @@
 
       return (
         <div className="p-4 md:p-6 space-y-4 pb-28 md:pb-6 animate-fade-in">
-          <div className="bg-slate-800/80 p-5 rounded-xl border border-slate-700/50 mb-2 shadow-lg">
+          <div className="bg-slate-800/80 p-5 rounded-2xl border border-slate-700/50 mb-2 shadow-lg">
             <label className="text-sm font-semibold text-slate-300 mb-2 block">Pilih Kas yang Di-opname</label>
             <select className="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm input-focus appearance-none outline-none cursor-pointer" value={selectedAccount} onChange={e => setSelectedAccount(e.target.value)}>
               {accounts.map(acc => (
@@ -646,53 +672,53 @@
             </select>
           </div>
 
-          <div className="bg-blue-900/40 p-5 rounded-xl flex justify-between items-center border border-blue-500/30">
+          <div className="bg-blue-900/40 p-5 rounded-2xl flex justify-between items-center border border-blue-500/30 shadow-lg">
             <span className="text-sm md:text-base font-medium text-blue-200">Saldo Pembukuan ({selectedAccount})</span>
             <span className="text-lg md:text-2xl font-bold text-blue-400">{formatRp(saldoBuku)}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            <div className="bg-slate-800/80 rounded-xl shadow-lg border border-slate-700/50 p-5 space-y-3">
+            <div className="bg-slate-800/80 rounded-2xl shadow-lg border border-slate-700/50 p-5 space-y-3">
               <h3 className="font-bold border-b border-slate-600 pb-2 text-slate-200">Lembar Uang Kertas</h3>
               {Object.keys(kertas).sort((a,b)=>b-a).map(k => (
                 <div key={k} className="flex justify-between items-center py-1.5">
                   <span className="w-1/3 text-sm text-slate-400">{formatRp(k)}</span>
-                  <input type="number" min="0" placeholder="0" className="w-1/3 bg-slate-700 border border-slate-600 rounded-md text-center p-2 text-white input-focus" value={kertas[k]} onChange={e => setKertas({...kertas, [k]: e.target.value})} />
+                  <input type="number" min="0" placeholder="0" className="w-1/3 bg-slate-700 border border-slate-600 rounded-lg text-center p-2 text-white input-focus" value={kertas[k]} onChange={e => setKertas({...kertas, [k]: e.target.value})} />
                   <span className="w-1/3 text-right font-medium text-sm md:text-base text-emerald-400">{formatRp(k * (kertas[k]||0))}</span>
                 </div>
               ))}
             </div>
             
-            <div className="bg-slate-800/80 rounded-xl shadow-lg border border-slate-700/50 p-5 space-y-3 h-fit">
+            <div className="bg-slate-800/80 rounded-2xl shadow-lg border border-slate-700/50 p-5 space-y-3 h-fit">
               <h3 className="font-bold border-b border-slate-600 pb-2 text-slate-200">Keping Uang Logam</h3>
               {Object.keys(logam).sort((a,b)=>b-a).map(l => (
                 <div key={l} className="flex justify-between items-center py-1.5">
                   <span className="w-1/3 text-sm text-slate-400">{formatRp(l)}</span>
-                  <input type="number" min="0" placeholder="0" className="w-1/3 bg-slate-700 border border-slate-600 rounded-md text-center p-2 text-white input-focus" value={logam[l]} onChange={e => setLogam({...logam, [l]: e.target.value})} />
+                  <input type="number" min="0" placeholder="0" className="w-1/3 bg-slate-700 border border-slate-600 rounded-lg text-center p-2 text-white input-focus" value={logam[l]} onChange={e => setLogam({...logam, [l]: e.target.value})} />
                   <span className="w-1/3 text-right font-medium text-sm md:text-base text-emerald-400">{formatRp(l * (logam[l]||0))}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-5 shadow-xl border border-slate-700 mt-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 shadow-xl border border-slate-700 mt-4">
             <div className="flex justify-between items-center"><span className="text-sm md:text-base text-slate-300">Total Kas Fisik</span><span className="text-xl md:text-2xl font-bold text-white">{formatRp(totalFisik)}</span></div>
             <div className="flex justify-between mt-4 pt-4 border-t border-slate-700 items-center">
-              <span className="text-sm md:text-base text-slate-300">Selisih Kas</span>
+              <span className="text-sm md:text-base text-slate-300">Selisih Kas (Fisik - Buku)</span>
               <span className={`text-lg md:text-xl font-bold ${selisih < 0 ? 'text-red-400' : selisih > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>{selisih > 0 ? '+' : ''}{formatRp(selisih)}</span>
             </div>
           </div>
 
-          <div className="bg-slate-800/80 rounded-xl p-5 shadow-lg border border-slate-700 mt-4">
-            <label className="text-sm font-semibold text-slate-300 block mb-3">Foto Bukti Fisik / Eviden</label>
+          <div className="bg-slate-800/80 rounded-2xl p-5 shadow-lg border border-slate-700 mt-4">
+            <label className="text-sm font-semibold text-slate-300 block mb-3">Foto Bukti Fisik / Eviden (Opsional)</label>
             {isCompressing ? (
                 <div className="w-full h-32 flex items-center justify-center border-2 border-slate-600 rounded-xl bg-slate-700/30">
-                    <span className="text-slate-400 text-sm animate-pulse">Memproses foto...</span>
+                    <span className="text-slate-400 text-sm animate-pulse">Memproses kompresi foto...</span>
                 </div>
             ) : fotoEviden ? (
                 <div className="relative inline-block w-full text-center bg-slate-900 rounded-xl border border-slate-600 py-4">
                     <img src={fotoEviden} className="h-40 mx-auto rounded shadow-lg object-contain" alt="Bukti Fisik" />
-                    <button onClick={() => setFotoEviden(null)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 rounded-full p-1.5 text-white shadow btn-press" title="Hapus Foto">
+                    <button onClick={() => setFotoEviden(null)} className="absolute top-3 right-3 bg-red-500 hover:bg-red-600 rounded-full p-1.5 text-white shadow btn-press" title="Hapus Foto">
                         <IconX />
                     </button>
                 </div>
@@ -700,19 +726,22 @@
                 <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-500 rounded-xl cursor-pointer hover:bg-slate-700/50 transition-colors bg-slate-900/30">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <IconCamera />
-                        <p className="text-sm text-slate-400 mt-2 font-medium">Ambil Foto / Unggah Eviden</p>
+                        <p className="text-sm text-slate-400 mt-2 font-medium">Klik untuk Ambil Foto / Unggah Eviden</p>
                     </div>
-                    <input type="file" accept="image/*" capture="environment" className="hidden" onChange={handleFotoChange} />
+                    <input type="file" accept="image/*" className="hidden" onChange={handleFotoChange} />
                 </label>
             )}
           </div>
 
           {selisih !== 0 && (
-            <textarea className="w-full bg-slate-800 border border-red-500/50 focus:border-red-500 rounded-xl p-4 text-white outline-none placeholder-slate-500" rows="3" placeholder="Wajib ketik alasan selisih di sini..." value={keteranganSelisih} onChange={e => setKeteranganSelisih(e.target.value)} />
+            <div className="animate-slide-down">
+              <label className="text-sm font-semibold text-amber-300 mb-2 block">Alasan Selisih Kas (Wajib Diisi)</label>
+              <textarea className="w-full bg-slate-800 border border-amber-500/60 focus:border-amber-400 rounded-xl p-4 text-white outline-none placeholder-slate-500" rows="3" placeholder="Jelaskan penyebab selisih kas fisik vs pembukuan..." value={keteranganSelisih} onChange={e => setKeteranganSelisih(e.target.value)} />
+            </div>
           )}
 
-          {/* Otorisasi PIN untuk Opname Brankas */}
-          <div className="bg-slate-800/80 rounded-xl p-5 border border-slate-700 mt-4">
+          {/* Otorisasi PIN untuk Opname */}
+          <div className="bg-slate-800/80 rounded-2xl p-5 border border-slate-700 mt-4">
             <label className="text-sm font-semibold text-slate-300 mb-2 block">PIN Otorisasi Opname (Pengurus / Kepala Unit)</label>
             <input 
               type="password" 
@@ -723,48 +752,65 @@
               value={pinOpname} 
               onChange={e => { setPinOpname(e.target.value); setPinOpnameError(''); }} 
             />
-            {pinOpnameError && <p className="text-red-400 text-xs mt-2 font-medium">{pinOpnameError}</p>}
+            {pinOpnameError ? (
+              <p className="text-red-400 text-xs mt-2 font-medium">{pinOpnameError}</p>
+            ) : (
+              <p className="text-slate-400 text-[11px] mt-1">Masukkan PIN Otorisasi resmi (4155 atau 9876)</p>
+            )}
           </div>
 
-          <button onClick={handleKirim} disabled={(selisih !== 0 && !keteranganSelisih.trim()) || !pinOpname} className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold py-3.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg btn-press text-base">Simpan Laporan Opname</button>
+          <button 
+            onClick={handleKirim} 
+            disabled={(selisih !== 0 && !keteranganSelisih.trim()) || !pinOpname || isSubmitting} 
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold py-3.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg btn-press text-base hover:shadow-blue-500/30 transition-all"
+          >
+            {isSubmitting ? 'Menyimpan ke Server...' : 'Simpan Laporan Opname'}
+          </button>
         </div>
       );
     };
 
+    // =========================================================================
+    // 4. RIWAYAT OPNAME VIEW
+    // =========================================================================
     const RiwayatOpnameView = ({ opnames, handlePrint, activeAccount }) => {
       const [photoModal, setPhotoModal] = useState(null);
 
       return (
         <div className="p-4 md:p-6 space-y-4 pb-28 md:pb-6 animate-fade-in relative">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="flex-1 bg-gradient-to-br from-emerald-500/20 to-teal-600/20 border border-emerald-600/30 rounded-xl p-4 animate-scale-in">
-              <p className="text-xs md:text-sm text-emerald-200 font-semibold">Total Riwayat Opname</p>
+            <div className="flex-1 bg-gradient-to-br from-emerald-500/20 to-teal-600/10 border border-emerald-600/30 rounded-2xl p-4 animate-scale-in">
+              <p className="text-xs md:text-sm text-emerald-200 font-semibold">Total Dokumen Opname Terverifikasi</p>
               <p className="text-2xl md:text-3xl font-bold text-emerald-400 mt-2">{opnames.length}</p>
             </div>
             
-            <button onClick={() => downloadCSV(opnames, `Riwayat_Opname_${activeAccount}_${new Date().toISOString().split('T')[0]}.csv`, 'opname')} className="md:w-auto w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 md:py-2.5 text-white hover:bg-blue-600 transition-colors btn-press flex justify-center items-center gap-2 text-sm font-semibold shadow-lg" title="Export Laporan Opname">
+            <button onClick={() => downloadCSV(opnames, `Riwayat_Opname_${activeAccount}_${new Date().toISOString().split('T')[0]}.csv`, 'opname')} className="md:w-auto w-full bg-slate-800 border border-slate-700 rounded-2xl px-4 py-3 md:py-2.5 text-white hover:bg-blue-600 transition-colors btn-press flex justify-center items-center gap-2 text-sm font-semibold shadow-lg" title="Export Laporan Opname">
                 <IconDownload /> <span>Export CSV</span>
             </button>
           </div>
 
-          {opnames.length === 0 && <div className="text-center py-10 text-slate-500 text-sm">Belum ada data Riwayat Opname.</div>}
+          {opnames.length === 0 && (
+            <div className="text-center py-12 text-slate-500 text-sm bg-slate-800/30 rounded-2xl border border-slate-800">
+              Belum ada riwayat opname untuk {activeAccount}.
+            </div>
+          )}
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {opnames.map((op, i) => (
-                <div key={op.id} className="bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 rounded-xl p-5 shadow-lg card-hover transaction-enter flex flex-col" style={{animationDelay: `${i * 0.1}s`}}>
+                <div key={op.id} className="bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 rounded-2xl p-5 shadow-lg card-hover transaction-enter flex flex-col" style={{animationDelay: `${i * 0.08}s`}}>
                   <div className="flex justify-between items-start border-b border-slate-700/50 pb-4 mb-4">
                     <div className="flex items-start gap-4 flex-1">
-                      <div className="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 flex items-center justify-center flex-shrink-0">
                         <IconCheckCircle />
                       </div>
                       <div>
-                          <p className="text-base font-semibold text-white">Opname Kas</p>
+                          <p className="text-base font-semibold text-white">Opname Kas Selesai</p>
                           <p className="text-sm text-slate-400 mt-1">📅 {formatDate(op.date)}</p>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="bg-black/20 p-3 rounded-lg mb-4 text-center border border-white/5">
+                  <div className="bg-black/25 p-3 rounded-xl mb-4 text-center border border-white/5">
                     <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Kas yang Diperiksa</p>
                     <p className="text-sm font-bold text-white mt-1">{op.account || 'Kas Koperasi'}</p>
                   </div>
@@ -779,22 +825,22 @@
                   </div>
 
                   {op.keterangan && (
-                    <div className="bg-slate-800 p-3 rounded-lg text-sm text-slate-300 border border-slate-600 mt-3">
-                        <strong>Ket:</strong> {op.keterangan}
+                    <div className="bg-slate-800/90 p-3 rounded-xl text-sm text-slate-300 border border-slate-700 mt-3">
+                        <strong>Keterangan:</strong> {op.keterangan}
                     </div>
                   )}
 
                   {op.foto && (
-                      <div className="mt-4 border border-slate-700 rounded-lg p-2 flex items-center justify-between bg-slate-900/50">
-                          <span className="text-xs font-semibold text-slate-400 px-2">Foto Eviden</span>
-                          <button onClick={() => setPhotoModal(op.foto)} className="flex items-center gap-1.5 bg-blue-600/20 text-blue-400 px-3 py-1.5 rounded-md text-xs font-bold hover:bg-blue-600/40 transition btn-press">
+                      <div className="mt-4 border border-slate-700 rounded-xl p-2.5 flex items-center justify-between bg-slate-900/60">
+                          <span className="text-xs font-semibold text-slate-400 px-2">Foto Eviden Fisik</span>
+                          <button onClick={() => setPhotoModal(op.foto)} className="flex items-center gap-1.5 bg-blue-600/20 text-blue-400 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-600/40 transition btn-press">
                               <IconEye /> Lihat Foto
                           </button>
                       </div>
                   )}
 
-                  <button onClick={() => handlePrint(op)} className="w-full bg-slate-700 text-white border border-slate-600 py-3 rounded-xl font-bold text-sm mt-4 flex justify-center items-center gap-2 hover:bg-slate-600 transition-colors btn-press">
-                    <IconPrint /> Cetak PDF Laporan
+                  <button onClick={() => handlePrint(op)} className="w-full bg-slate-700 hover:bg-slate-600 text-white border border-slate-600 py-3 rounded-xl font-bold text-sm mt-4 flex justify-center items-center gap-2 transition-colors btn-press">
+                    <IconPrint /> Cetak Formulir Cash Opname
                   </button>
                 </div>
             ))}
@@ -802,11 +848,16 @@
 
           {photoModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-                  <div className="relative w-full max-w-2xl">
-                      <button onClick={() => setPhotoModal(null)} className="absolute -top-10 right-0 text-white hover:text-slate-300 btn-press">
-                          <IconX />
-                      </button>
-                      <img src={photoModal} alt="Eviden" className="w-full h-auto rounded-xl shadow-2xl" />
+                  <div className="relative w-full max-w-2xl bg-slate-900 p-4 rounded-2xl border border-slate-700">
+                      <div className="flex justify-between items-center mb-3">
+                        <h3 className="text-white font-bold text-sm">Bukti Fisik Eviden</h3>
+                        <button onClick={() => setPhotoModal(null)} className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 btn-press">
+                            <IconX />
+                        </button>
+                      </div>
+                      <div className="max-h-[70vh] overflow-auto flex justify-center bg-black/40 rounded-xl p-2">
+                        <img src={photoModal} alt="Eviden" className="max-w-full h-auto rounded-lg shadow-2xl object-contain" />
+                      </div>
                   </div>
               </div>
           )}
@@ -814,6 +865,9 @@
       );
     };
 
+    // =========================================================================
+    // 5. TEMPLATE CETAK LAPORAN
+    // =========================================================================
     const PrintTemplate = ({ op, setPrintData }) => {
       const kertas = (op.pecahan && op.pecahan.kertas) ? op.pecahan.kertas : {'100000':'', '50000':'', '20000':'', '10000':'', '5000':'', '2000':'', '1000':''};
       const logam = (op.pecahan && op.pecahan.logam) ? op.pecahan.logam : {'1000':'', '500':'', '200':'', '100':''};
@@ -970,17 +1024,27 @@
       );
     };
 
+    // =========================================================================
+    // MAIN APP COMPONENT
+    // =========================================================================
     function App() {
       const [activeTab, setActiveTab] = useState('dashboard');
       const [activeAccount, setActiveAccount] = useState('Kas Koperasi');
       const [rawTransactions, setRawTransactions] = useState([]);
       const [rawOpnames, setRawOpnames] = useState([]);
       const [printData, setPrintData] = useState(null);
+      const [isSubmitting, setIsSubmitting] = useState(false);
+      const [toast, setToast] = useState(null);
       
       const [dashboardMonth, setDashboardMonth] = useState(new Date().getMonth());
       const [dashboardYear, setDashboardYear] = useState(new Date().getFullYear());
 
       const accounts = ['Kas Koperasi', 'Kas PT MBK', 'Kas Kopkarindo Travel', 'Kas Adamart'];
+
+      const showToast = (message, type = 'success') => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 4000);
+      };
 
       const fetchData = () => {
         fetch(SCRIPT_URL + '?action=readData')
@@ -1065,14 +1129,30 @@
       }))).sort((a,b) => a - b);
       if(availableYears.length === 0) availableYears.push(new Date().getFullYear());
 
-      const submitTransaksi = (newTx) => {
+      const submitTransaksi = async (newTx) => {
+        setIsSubmitting(true);
         const targetAccount = newTx.account || activeAccount;
         const txToSave = { ...newTx, desc: `[${targetAccount}] ${newTx.desc}`, account: targetAccount };
         setRawTransactions(prev => [...prev, txToSave]);
-        fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addTransaction', ...txToSave }) });
+        
+        try {
+          await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'addTransaction', ...txToSave }) 
+          });
+          showToast('Transaksi berhasil disimpan ke Google Sheets!', 'success');
+          setTimeout(fetchData, 1500);
+        } catch (err) {
+          console.error(err);
+          showToast('Transaksi tersimpan lokal (sinkronisasi tertunda).', 'warning');
+        } finally {
+          setIsSubmitting(false);
+        }
       };
 
-      const submitOpname = (dataOpname) => {
+      const submitOpname = async (dataOpname) => {
+        setIsSubmitting(true);
         const targetAccount = dataOpname.account || activeAccount;
         const opKet = `[${targetAccount}] ${dataOpname.keterangan || 'Opname Kas'}`;
         
@@ -1084,7 +1164,21 @@
         };
         setRawOpnames(prev => [...prev, opToSave]);
         setActiveTab('riwayat');
-        fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'submitOpname', ...opToSave }) });
+
+        try {
+          await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'submitOpname', ...opToSave }) 
+          });
+          showToast('Laporan Cash Opname & Foto berhasil disimpan!', 'success');
+          setTimeout(fetchData, 1500);
+        } catch (err) {
+          console.error(err);
+          showToast('Laporan opname tersimpan lokal (sinkronisasi tertunda).', 'warning');
+        } finally {
+          setIsSubmitting(false);
+        }
       };
 
       if (printData) {
@@ -1095,9 +1189,21 @@
         <div className="flex h-full w-full bg-slate-950 justify-center">
           <div className="flex w-full max-w-6xl h-full relative overflow-hidden bg-slate-900 shadow-2xl">
             
+            {/* TOAST NOTIFIKASI */}
+            {toast && (
+              <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 animate-slide-down">
+                <div className={`px-5 py-3 rounded-2xl shadow-2xl text-sm font-bold flex items-center gap-2 border ${toast.type === 'success' ? 'bg-emerald-600 border-emerald-400 text-white' : 'bg-amber-600 border-amber-400 text-white'}`}>
+                  <span>{toast.type === 'success' ? '✓' : '⚠️'}</span>
+                  <span>{toast.message}</span>
+                </div>
+              </div>
+            )}
+
+            {/* SIDEBAR DESKTOP */}
             <aside className="hidden md:flex w-64 flex-col bg-slate-950 border-r border-slate-800 z-20">
               <div className="p-6 pb-2">
                 <h1 className="text-2xl font-bold text-white tracking-tight">KasKecil Pro</h1>
+                <p className="text-xs text-blue-400 mt-1 font-semibold">KOPKAR AKM</p>
               </div>
               <nav className="flex-1 px-4 space-y-3 mt-6">
                 <button onClick={() => setActiveTab('dashboard')} className={`flex items-center gap-3 w-full p-3 rounded-xl transition-all btn-press ${activeTab === 'dashboard' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
@@ -1115,11 +1221,13 @@
               </nav>
             </aside>
 
+            {/* MAIN CONTENT AREA */}
             <div className="flex-1 flex flex-col h-full relative w-full">
               <header className="bg-gradient-to-r from-blue-600 to-blue-500 px-4 md:px-8 pt-5 pb-3 shadow-md z-10">
                 <div className="flex items-center justify-between md:hidden">
                   <div>
                     <h1 className="text-2xl font-bold text-white tracking-tight">KasKecil Pro</h1>
+                    <p className="text-[11px] text-blue-100 font-semibold">KOPKAR AKM</p>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white font-bold text-lg border border-white/30 shadow-lg">
                     K
@@ -1161,12 +1269,14 @@
                   submitTransaksi={submitTransaksi} 
                   accounts={accounts} 
                   activeAccount={activeAccount} 
+                  isSubmitting={isSubmitting}
                 />}
                 {activeTab === 'opname' && <CashOpnameView 
                   saldoBukuAll={saldoBukuSemuaKas} 
                   submitOpname={submitOpname} 
                   accounts={accounts} 
                   activeAccount={activeAccount} 
+                  isSubmitting={isSubmitting}
                 />}
                 {activeTab === 'riwayat' && <RiwayatOpnameView 
                   opnames={opnames} 
@@ -1175,17 +1285,18 @@
                 />}
               </main>
 
-              <nav className="md:hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900 to-slate-800 border-t border-slate-700/50 flex justify-around py-4 z-20 shadow-2xl">
-                <button onClick={() => setActiveTab('dashboard')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='dashboard'?'tab-active':'tab-inactive'}`}>
+              {/* BOTTOM NAVIGATION MOBILE */}
+              <nav className="md:hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900 to-slate-800 border-t border-slate-700/50 flex justify-around py-3.5 z-20 shadow-2xl">
+                <button onClick={() => setActiveTab('dashboard')} className={`flex flex-col items-center gap-1 tab-button btn-press ${activeTab==='dashboard'?'tab-active':'tab-inactive'}`}>
                   <IconHome /><span className="text-[10px] font-semibold">Dashboard</span>
                 </button>
-                <button onClick={() => setActiveTab('transaksi')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='transaksi'?'tab-active':'tab-inactive'}`}>
+                <button onClick={() => setActiveTab('transaksi')} className={`flex flex-col items-center gap-1 tab-button btn-press ${activeTab==='transaksi'?'tab-active':'tab-inactive'}`}>
                   <IconList /><span className="text-[10px] font-semibold">Transaksi</span>
                 </button>
-                <button onClick={() => setActiveTab('opname')} className={`flex flex-col items-center gap-1.5 tab-button btn-press ${activeTab==='opname'?'tab-active':'tab-inactive'}`}>
+                <button onClick={() => setActiveTab('opname')} className={`flex flex-col items-center gap-1 tab-button btn-press ${activeTab==='opname'?'tab-active':'tab-inactive'}`}>
                   <IconOpname /><span className="text-[10px] font-semibold">Opname</span>
                 </button>
-                <button onClick={() => setActiveTab('riwayat')} className={`flex flex-col items-center gap-1.5 tab-button btn-press relative ${activeTab==='riwayat'?'tab-active':'tab-inactive'}`}>
+                <button onClick={() => setActiveTab('riwayat')} className={`flex flex-col items-center gap-1 tab-button btn-press relative ${activeTab==='riwayat'?'tab-active':'tab-inactive'}`}>
                     <IconHistory />
                     <span className="text-[10px] font-semibold">Riwayat</span>
                 </button>
